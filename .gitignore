@@ -19,6 +19,10 @@ out/
 *.pem
 *.key
 
+# Archives and binaries
+*.zip
+*.tar.gz
+
 # IDE and OS
 .DS_Store
 Thumbs.db
