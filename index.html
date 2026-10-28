@@ -3,12 +3,12 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-  <title>Electiva IA · Asistente y Preguntas Frecuentes</title>
+  <title>Electiva IA · Dosificador Penal & Asistente Jurídico</title>
   
-  <!-- Google Fonts & Material Symbols Icons -->
+  <!-- Google Fonts: Source Serif 4 (Judicial), Inter (Interfaz), JetBrains Mono (Cálculos) -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;600&family=Source+Serif+4:ital,opsz,wght@0,8..60,600;0,8..60,700;1,8..60,600&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;600;700&family=Source+Serif+4:ital,opsz,wght@0,8..60,600;0,8..60,700;1,8..60,600&display=swap" rel="stylesheet">
   <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200" rel="stylesheet">
   
   <!-- Tailwind CSS CDN -->
@@ -21,13 +21,13 @@
           colors: {
             judicial: {
               navy: '#0f172a',
-              navyLight: '#1e293b',
+              navyDark: '#090d16',
               amber: '#b45309',
               amberLight: '#f59e0b',
               emerald: '#047857',
               emeraldLight: '#10b981',
+              crimson: '#b91c1c',
               surface: '#f8fafc',
-              card: '#ffffff',
               border: '#e2e8f0',
               muted: '#64748b'
             }
@@ -43,7 +43,6 @@
   </script>
   
   <style>
-    /* Estilos base táctiles y fluidos para celular */
     body {
       -webkit-tap-highlight-color: transparent;
       font-family: 'Inter', sans-serif;
@@ -52,94 +51,93 @@
       font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
       vertical-align: middle;
     }
-    /* Suavizado de transiciones para acordeones */
-    .faq-answer {
-      transition: max-height 0.3s ease-out, opacity 0.25s ease-out, margin 0.25s ease-out;
+    input[type=range] {
+      accent-color: #b45309;
     }
   </style>
 </head>
 
-<body class="bg-[#f8fafc] text-slate-800 min-h-screen flex flex-col justify-between antialiased selection:bg-amber-100 selection:text-amber-900">
+<body class="bg-[#f8fafc] text-slate-800 min-h-screen flex flex-col justify-between antialiased selection:bg-amber-100 selection:text-amber-900 pb-16 md:pb-0">
 
-  <!-- ========================================== -->
-  <!-- BARRA DE NAVEGACIÓN SUPERIOR (RESPONSIVE)  -->
-  <!-- ========================================== -->
-  <header class="sticky top-0 z-50 bg-white/95 backdrop-blur border-b border-slate-200 shadow-sm">
-    <div class="max-w-4xl mx-auto px-4 h-16 flex items-center justify-between gap-3">
+  <!-- ============================================================ -->
+  <!-- BARRA DE NAVEGACIÓN PRINCIPAL (DESKTOP & HEADER MÓVIL)       -->
+  <!-- ============================================================ -->
+  <header class="sticky top-0 z-40 bg-white/95 backdrop-blur border-b border-slate-200 shadow-sm">
+    <div class="max-w-6xl mx-auto px-4 h-16 flex items-center justify-between gap-3">
       
       <!-- Marca y Título -->
       <div class="flex items-center gap-3">
-        <div class="w-10 h-10 rounded-lg bg-slate-900 text-amber-500 flex items-center justify-center font-headline font-bold text-xl shadow-sm shrink-0">
+        <div class="w-10 h-10 rounded-xl bg-slate-900 text-amber-500 flex items-center justify-center font-headline font-bold text-xl shadow-md shrink-0">
           ⚖️
         </div>
         <div>
-          <div class="flex items-center gap-1.5">
+          <div class="flex items-center gap-2">
             <h1 class="font-headline font-bold text-lg md:text-xl text-slate-900 leading-tight">Electiva IA</h1>
-            <span class="text-[10px] uppercase tracking-wider font-bold bg-amber-100 text-amber-800 px-1.5 py-0.5 rounded">Penal</span>
+            <span class="text-[10px] uppercase tracking-wider font-bold bg-amber-100 text-amber-800 px-1.5 py-0.5 rounded">Dosificador Penal</span>
           </div>
-          <p class="text-xs text-slate-500 font-medium">Asistente Jurídico y Soporte Académico</p>
+          <p class="text-xs text-slate-500 font-medium hidden sm:block">Ley 599 de 2000 · Sistema de Cuartos & Soporte Académico</p>
         </div>
       </div>
 
-      <!-- Indicador de Función Activa en Escritorio -->
-      <nav class="hidden md:flex items-center gap-1 text-sm font-medium">
-        <button id="nav-tab-1" onclick="switchTab('faq')" class="px-3 py-1.5 rounded-lg bg-slate-900 text-white font-semibold transition-all flex items-center gap-1.5 shadow-sm">
+      <!-- Menú Desktop de las 4 Funciones -->
+      <nav class="hidden md:flex items-center gap-1.5 text-xs lg:text-sm font-medium">
+        <button id="nav-tab-1" onclick="switchTab('faq')" class="px-3 py-2 rounded-lg bg-slate-900 text-white font-semibold transition-all flex items-center gap-1.5 shadow-sm">
           <span class="material-symbols-outlined text-[18px]">quiz</span>
           <span>1. Preguntas Frecuentes</span>
         </button>
-        <button id="nav-tab-2" onclick="switchTab('prompt')" class="px-3 py-1.5 rounded-lg text-slate-600 hover:text-slate-900 hover:bg-slate-100 transition-all flex items-center gap-1.5">
-          <span class="material-symbols-outlined text-[18px]">smart_toy</span>
+        <button id="nav-tab-2" onclick="switchTab('prompt')" class="px-3 py-2 rounded-lg text-slate-600 hover:text-slate-900 hover:bg-slate-100 transition-all flex items-center gap-1.5">
+          <span class="material-symbols-outlined text-[18px]">psychology</span>
           <span>2. Generador de Prompts</span>
         </button>
-        <button id="nav-tab-3" onclick="switchTab('funcion3')" class="px-3 py-1.5 rounded-lg text-slate-600 hover:text-slate-900 hover:bg-slate-100 transition-all flex items-center gap-1.5">
-          <span class="material-symbols-outlined text-[18px]">balance</span>
-          <span>3. Función 3</span>
+        <button id="nav-tab-3" onclick="switchTab('calculadora')" class="px-3 py-2 rounded-lg text-slate-600 hover:text-slate-900 hover:bg-slate-100 transition-all flex items-center gap-1.5">
+          <span class="material-symbols-outlined text-[18px]">calculate</span>
+          <span>3. Calculadora de Cuartos</span>
         </button>
-        <button id="nav-tab-4" onclick="switchTab('docente')" class="px-3 py-1.5 rounded-lg text-slate-600 hover:text-slate-900 hover:bg-slate-100 transition-all flex items-center gap-1.5">
+        <button id="nav-tab-4" onclick="switchTab('docente')" class="px-3 py-2 rounded-lg text-slate-600 hover:text-slate-900 hover:bg-slate-100 transition-all flex items-center gap-1.5">
           <span class="material-symbols-outlined text-[18px]">mail</span>
           <span>4. Escribir al Profesor</span>
         </button>
       </nav>
 
-      <!-- Botón de Estado / Base de Datos -->
-      <div class="flex items-center gap-2">
-        <span id="db-status-badge" class="inline-flex items-center gap-1 text-xs font-medium px-2 py-1 rounded-full bg-emerald-50 text-emerald-700 border border-emerald-200" title="Almacenamiento activo en navegador y listo para Firebase">
-          <span class="w-2 h-2 rounded-full bg-emerald-500 animate-pulse"></span>
-          <span class="hidden sm:inline">En Línea</span>
-        </span>
-      </div>
+      <!-- Badge de Estado de Base de Datos -->
+      <button onclick="showDatabaseStatusModal()" class="flex items-center gap-1.5 text-xs font-semibold px-2.5 py-1.5 rounded-full bg-slate-100 hover:bg-slate-200 border border-slate-200 transition-colors" title="Ver estado de almacenamiento y conector Firebase">
+        <span class="w-2 h-2 rounded-full bg-emerald-500 animate-pulse"></span>
+        <span class="hidden sm:inline text-slate-700">BD: Activa</span>
+        <span class="material-symbols-outlined text-[16px] text-slate-400">database</span>
+      </button>
+
     </div>
   </header>
 
-  <!-- ========================================== -->
-  <!-- CONTENIDO PRINCIPAL                        -->
-  <!-- ========================================== -->
-  <main class="max-w-4xl w-full mx-auto px-4 py-6 flex-1 flex flex-col gap-6">
+  <!-- ============================================================ -->
+  <!-- CONTENEDOR PRINCIPAL MULTI-PANTALLA                          -->
+  <!-- ============================================================ -->
+  <main class="max-w-6xl w-full mx-auto px-4 py-6 flex-1 flex flex-col gap-6">
 
-    <!-- ======================================================== -->
-    <!-- FUNCIÓN 1: PREGUNTAS FRECUENTES (FAQ) Y BANCO DE DUDAS  -->
-    <!-- ======================================================== -->
+    <!-- ========================================================== -->
+    <!-- FUNCIÓN 1: PREGUNTAS FRECUENTES Y BANCO DE DUDAS           -->
+    <!-- ========================================================== -->
     <section id="panel-faq" class="flex flex-col gap-6">
       
-      <!-- Encabezado de la Función -->
+      <!-- Banner Principal FAQ -->
       <div class="bg-white rounded-2xl p-5 sm:p-6 border border-slate-200 shadow-sm relative overflow-hidden">
         <div class="absolute -right-6 -bottom-6 opacity-5 pointer-events-none">
-          <span class="material-symbols-outlined text-[140px] text-slate-900">help</span>
+          <span class="material-symbols-outlined text-[150px] text-slate-900">help</span>
         </div>
         <div class="relative z-10 max-w-2xl">
           <div class="inline-flex items-center gap-1.5 text-xs font-bold uppercase tracking-wider text-amber-700 bg-amber-50 px-2.5 py-1 rounded-md mb-2">
             <span class="material-symbols-outlined text-[16px]">menu_book</span>
-            Función 1 · Base de Conocimiento
+            Función 1 · Base de Conocimiento Oficial
           </div>
           <h2 class="font-headline font-bold text-2xl sm:text-3xl text-slate-900 leading-snug">
             Preguntas Frecuentes y Banco de Dudas
           </h2>
           <p class="text-sm sm:text-base text-slate-600 mt-2 leading-relaxed">
-            Resuelve dudas claves sobre los hechos del caso, el arbitrio judicial en la dosificación punitiva y los entregables del proyecto.
+            Consulta las respuestas oficiales sobre los hechos jurídicamente relevantes, el principio de arbitrio judicial en la dosificación punitiva y las fechas de entrega.
           </p>
         </div>
 
-        <!-- Barra de Búsqueda Rápida -->
+        <!-- Buscador en tiempo real -->
         <div class="mt-5 relative">
           <span class="material-symbols-outlined absolute left-3.5 top-1/2 -translate-y-1/2 text-slate-400 text-[20px]">
             search
@@ -148,7 +146,7 @@
             type="text" 
             id="faq-search" 
             oninput="filterFAQ()"
-            placeholder="Buscar por palabra clave (ej. hechos, cuartos, juez, entrega)..." 
+            placeholder="Buscar por palabra clave (ej. hechos, cuartos, juez, entrega, sevicia)..." 
             class="w-full pl-11 pr-10 py-3 rounded-xl bg-slate-50 border border-slate-200 text-sm sm:text-base text-slate-800 placeholder:text-slate-400 focus:bg-white focus:outline-none focus:ring-2 focus:ring-slate-900/10 focus:border-slate-800 transition-all shadow-inner"
           >
           <button 
@@ -162,12 +160,12 @@
         </div>
       </div>
 
-      <!-- Lista de Preguntas Frecuentes (Acordeones) -->
+      <!-- Acordeones de las 3 Preguntas Obligatorias -->
       <div class="flex flex-col gap-3" id="faq-list-container">
         
-        <!-- Pregunta 1 Obligatoria -->
-        <article class="faq-card bg-white rounded-xl border border-slate-200 shadow-sm overflow-hidden transition-all hover:border-slate-300" data-keywords="hechos del caso ingreso caso concreto imputacion acusacion relato factico circunstancias">
-          <button type="button" onclick="toggleFAQ(this)" class="w-full px-5 py-4 text-left flex items-start justify-between gap-3 bg-white hover:bg-slate-50/70 transition-colors">
+        <!-- Pregunta 1 -->
+        <article class="faq-card bg-white rounded-xl border border-slate-200 shadow-sm overflow-hidden transition-all hover:border-slate-300" data-keywords="hechos del caso ingreso caso concreto imputacion acusacion relato factico circunstancias indefension sevicia">
+          <button type="button" onclick="toggleFAQ(this)" class="w-full px-5 py-4 text-left flex items-start justify-between gap-3 bg-white hover:bg-slate-50 transition-colors">
             <div class="flex items-start gap-3">
               <span class="w-7 h-7 rounded-lg bg-amber-100 text-amber-800 flex items-center justify-center font-bold text-xs shrink-0 mt-0.5">
                 01
@@ -180,31 +178,31 @@
               expand_more
             </span>
           </button>
-          <div class="faq-answer px-5 pb-5 pt-1 text-slate-600 text-sm sm:text-base leading-relaxed border-t border-slate-100 bg-slate-50/30">
+          <div class="faq-answer hidden px-5 pb-5 pt-1 text-slate-600 text-sm sm:text-base leading-relaxed border-t border-slate-100 bg-slate-50/40">
             <p class="mb-3">
               En este campo se debe consignar el <strong>relato fáctico jurídicamente relevante</strong> presentado en la formulación de imputación o en el escrito de acusación.
             </p>
             <div class="bg-amber-50/70 border-l-4 border-amber-600 p-3.5 rounded-r-lg text-sm text-slate-700 flex flex-col gap-1.5">
               <span class="font-semibold text-amber-900 flex items-center gap-1.5">
                 <span class="material-symbols-outlined text-[18px] text-amber-700">fact_check</span>
-                Elementos indispensables a incluir:
+                Elementos indispensables que deben incluirse:
               </span>
               <ul class="list-disc list-inside space-y-1 text-slate-600 text-xs sm:text-sm pl-1">
-                <li><strong>Circunstancias de tiempo, modo y lugar:</strong> Cuándo, dónde y cómo ocurrió la conducta.</li>
+                <li><strong>Circunstancias de tiempo, modo y lugar:</strong> Cuándo, dónde y cómo ocurrió la conducta punible.</li>
                 <li><strong>Situación de la víctima:</strong> Si se encontraba en estado de indefensión, inferioridad o vulnerabilidad manifiesta.</li>
-                <li><strong>Pluralidad de actores:</strong> Si el acusado actuó en compañía de otras personas (coautoría o complicidad).</li>
-                <li><strong>Medios y sevicia:</strong> Uso de armas, ensañamiento o actos que aumenten deliberadamente el sufrimiento.</li>
+                <li><strong>Pluralidad de partícipes:</strong> Si el acusado actuó en coautoría o con auxilio de terceros no identificados.</li>
+                <li><strong>Medios e intensidad lesiva:</strong> Empleo de armas cortopunzantes, armas de fuego o sevicia deliberada.</li>
               </ul>
             </div>
             <p class="mt-3 text-xs sm:text-sm text-slate-500">
-              💡 <em>Importante:</em> A partir de estos datos, el sistema extrae las circunstancias de menor punibilidad (Art. 55 C.P.) y mayor punibilidad (Art. 58 C.P.) que definirán en qué cuarto punitivo se ubicará la pena.
+              💡 <em>Efecto en la dosificación:</em> A partir de estos hechos probados, el sistema identifica si concurren circunstancias de menor punibilidad (Art. 55) o de mayor punibilidad (Art. 58) que fijan el cuarto punitivo.
             </p>
           </div>
         </article>
 
-        <!-- Pregunta 2 Obligatoria -->
-        <article class="faq-card bg-white rounded-xl border border-slate-200 shadow-sm overflow-hidden transition-all hover:border-slate-300" data-keywords="calculo cuartos movilidad reemplaza decision juez arbitrio judicial sentencia autonomia">
-          <button type="button" onclick="toggleFAQ(this)" class="w-full px-5 py-4 text-left flex items-start justify-between gap-3 bg-white hover:bg-slate-50/70 transition-colors">
+        <!-- Pregunta 2 -->
+        <article class="faq-card bg-white rounded-xl border border-slate-200 shadow-sm overflow-hidden transition-all hover:border-slate-300" data-keywords="calculo cuartos movilidad reemplaza decision juez arbitrio judicial sentencia autonomia motivada">
+          <button type="button" onclick="toggleFAQ(this)" class="w-full px-5 py-4 text-left flex items-start justify-between gap-3 bg-white hover:bg-slate-50 transition-colors">
             <div class="flex items-start gap-3">
               <span class="w-7 h-7 rounded-lg bg-amber-100 text-amber-800 flex items-center justify-center font-bold text-xs shrink-0 mt-0.5">
                 02
@@ -217,31 +215,31 @@
               expand_more
             </span>
           </button>
-          <div class="faq-answer px-5 pb-5 pt-1 text-slate-600 text-sm sm:text-base leading-relaxed border-t border-slate-100 bg-slate-50/30">
+          <div class="faq-answer hidden px-5 pb-5 pt-1 text-slate-600 text-sm sm:text-base leading-relaxed border-t border-slate-100 bg-slate-50/40">
             <div class="flex items-center gap-2 mb-3 text-red-700 bg-red-50 p-2.5 rounded-lg border border-red-200">
               <span class="material-symbols-outlined text-[20px]">cancel</span>
-              <strong class="text-sm font-semibold">No, bajo ninguna circunstancia.</strong>
+              <strong class="text-sm font-semibold">No. Bajo ninguna circunstancia reemplaza la decisión judicial.</strong>
             </div>
             <p class="mb-3">
-              El cálculo matemático de los cuartos de punibilidad (Art. 61 del Código Penal colombiano) es una <strong>herramienta técnica y metodológica de auxilio</strong> que delimita los márgenes mínimo y máximo dentro de los cuales la ley autoriza tasar la pena.
+              El cálculo de los cuartos (Art. 61 del Código Penal) es un <strong>mecanismo técnico, aritmético y de control de legalidad</strong>. Su propósito es definir los márgenes objetivos dentro de los cuales la ley autoriza al fallador a moverse.
             </p>
             <div class="bg-slate-100 p-3.5 rounded-lg text-xs sm:text-sm text-slate-700 space-y-2">
               <p>
-                <strong>El principio de Arbitrio Judicial:</strong> El juez de conocimiento conserva plena autonomía constitucional. Una vez fijado el cuarto legal aplicable, el funcionario judicial es quien fundamenta y motiva la pena exacta, valorando:
+                <strong>Principio de Arbitrio Judicial:</strong> Una vez fijado el cuarto legal aplicable, el juez de conocimiento conserva la facultad constitucional y exclusiva de fijar la pena concreta mediante una motivación razonada en la sentencia, ponderando:
               </p>
               <ul class="list-disc list-inside pl-1 text-slate-600 space-y-1">
-                <li>La mayor o menor gravedad de la conducta tipificada.</li>
-                <li>El daño real o potencial efectivamente ocasionado al bien jurídico protegido.</li>
-                <li>La intensidad del dolo o culpabilidad del sentenciado.</li>
-                <li>La necesidad real de pena preventiva, retributiva o resocializadora en el caso concreto.</li>
+                <li>La gravedad objetiva y subjetiva de la conducta punible.</li>
+                <li>La intensidad del daño real o potencial ocasionado a la víctima o sociedad.</li>
+                <li>El grado de culpabilidad y motivos determinantes del autor.</li>
+                <li>La necesidad preventiva, retributiva o de reinserción social de la pena en el caso concreto.</li>
               </ul>
             </div>
           </div>
         </article>
 
-        <!-- Pregunta 3 Obligatoria -->
-        <article class="faq-card bg-white rounded-xl border border-slate-200 shadow-sm overflow-hidden transition-all hover:border-slate-300" data-keywords="cuando entrega primera version funcional proyecto cronograma fecha prototipo electiva">
-          <button type="button" onclick="toggleFAQ(this)" class="w-full px-5 py-4 text-left flex items-start justify-between gap-3 bg-white hover:bg-slate-50/70 transition-colors">
+        <!-- Pregunta 3 -->
+        <article class="faq-card bg-white rounded-xl border border-slate-200 shadow-sm overflow-hidden transition-all hover:border-slate-300" data-keywords="cuando entrega primera version funcional proyecto cronograma fecha prototipo electiva ia">
+          <button type="button" onclick="toggleFAQ(this)" class="w-full px-5 py-4 text-left flex items-start justify-between gap-3 bg-white hover:bg-slate-50 transition-colors">
             <div class="flex items-start gap-3">
               <span class="w-7 h-7 rounded-lg bg-amber-100 text-amber-800 flex items-center justify-center font-bold text-xs shrink-0 mt-0.5">
                 03
@@ -254,18 +252,18 @@
               expand_more
             </span>
           </button>
-          <div class="faq-answer px-5 pb-5 pt-1 text-slate-600 text-sm sm:text-base leading-relaxed border-t border-slate-100 bg-slate-50/30">
+          <div class="faq-answer hidden px-5 pb-5 pt-1 text-slate-600 text-sm sm:text-base leading-relaxed border-t border-slate-100 bg-slate-50/40">
             <p class="mb-3">
-              La <strong>primera versión funcional del prototipo</strong> se entrega al finalizar la fase de desarrollo de los componentes esenciales establecidos en el plan de la Electiva de Inteligencia Artificial.
+              La <strong>primera versión funcional del prototipo</strong> se entrega al finalizar la implementación de las 4 funciones básicas del proyecto de la Electiva de Inteligencia Artificial.
             </p>
             <div class="grid grid-cols-1 sm:grid-cols-2 gap-3 my-3">
               <div class="p-3 bg-white border border-slate-200 rounded-lg">
-                <span class="text-xs font-bold uppercase tracking-wider text-slate-500 block">Alcance del Prototipo</span>
-                <span class="text-sm font-semibold text-slate-800 mt-1 block">Interacción con las 4 funciones principales completadas en GitHub y desplegadas.</span>
+                <span class="text-xs font-bold uppercase tracking-wider text-slate-500 block">Requisito de Entrega</span>
+                <span class="text-sm font-semibold text-slate-800 mt-1 block">Prototipo 100% interactivo en navegador, alojado en GitHub Pages y con base de datos de preguntas activa.</span>
               </div>
               <div class="p-3 bg-white border border-slate-200 rounded-lg">
-                <span class="text-xs font-bold uppercase tracking-wider text-slate-500 block">Canal Oficial</span>
-                <span class="text-sm font-semibold text-slate-800 mt-1 block">Revisa el cronograma oficial de la plataforma del curso o consulta al docente con el botón de contacto.</span>
+                <span class="text-xs font-bold uppercase tracking-wider text-slate-500 block">Contacto Docente</span>
+                <span class="text-sm font-semibold text-slate-800 mt-1 block">Puedes verificar la fecha oficial en la plataforma del curso o utilizar la Función 4 para consultar directamente al profesor.</span>
               </div>
             </div>
           </div>
@@ -273,25 +271,23 @@
 
       </div>
 
-      <!-- Mensaje cuando la búsqueda no arroja resultados -->
+      <!-- Mensaje cuando la búsqueda no coincide -->
       <div id="no-faq-results" class="hidden bg-white p-8 rounded-xl border border-slate-200 text-center">
         <span class="material-symbols-outlined text-[40px] text-slate-300">search_off</span>
         <h4 class="font-semibold text-slate-800 mt-2">No se encontraron preguntas coincidentes</h4>
-        <p class="text-sm text-slate-500 mt-1">Prueba con otras palabras o registra tu duda en el formulario de abajo.</p>
+        <p class="text-sm text-slate-500 mt-1">Prueba con otro término o formula tu pregunta en el formulario de abajo.</p>
       </div>
 
-      <!-- ======================================================== -->
-      <!-- BANCO DE PREGUNTAS: FORMULARIO PARA REGISTRAR NUEVA DUDA -->
-      <!-- ======================================================== -->
+      <!-- Formulario para Registrar Nueva Duda (Banco Colaborativo) -->
       <section class="bg-white rounded-2xl p-5 sm:p-6 border border-slate-200 shadow-sm">
         <div class="flex items-center gap-2 mb-2">
           <span class="material-symbols-outlined text-amber-700 text-[22px]">contact_support</span>
           <h3 class="font-headline font-bold text-xl text-slate-900">
-            ¿Tienes otra pregunta sobre el proyecto?
+            ¿Tienes otra duda sobre el caso o la electiva?
           </h3>
         </div>
         <p class="text-sm text-slate-600 mb-4">
-          Escribe tu pregunta para guardarla en el banco colaborativo. Si un docente o compañero la responde, aparecerá aquí mismo.
+          Guarda tu duda en la base de datos comunitaria. El equipo docente o los compañeros responderán y la respuesta aparecerá aquí.
         </p>
 
         <form id="new-question-form" onsubmit="submitQuestion(event)" class="space-y-4">
@@ -303,13 +299,13 @@
               <input 
                 type="text" 
                 id="student-name" 
-                placeholder="Ej. Andrés R. / Anónimo" 
+                placeholder="Ej. Sofía R. / Anónimo" 
                 class="w-full px-3.5 py-2.5 rounded-lg bg-slate-50 border border-slate-200 text-sm text-slate-800 placeholder:text-slate-400 focus:bg-white focus:outline-none focus:ring-2 focus:ring-slate-900/10 focus:border-slate-800 transition-all"
               >
             </div>
             <div>
               <label for="question-category" class="block text-xs font-bold uppercase tracking-wider text-slate-600 mb-1">
-                Tema / Módulo
+                Módulo / Tema
               </label>
               <select 
                 id="question-category" 
@@ -326,13 +322,13 @@
 
           <div>
             <label for="question-text" class="block text-xs font-bold uppercase tracking-wider text-slate-600 mb-1">
-              Tu Pregunta o Duda <span class="text-amber-700">*</span>
+              Tu Pregunta <span class="text-amber-700">*</span>
             </label>
             <textarea 
               id="question-text" 
               required
               rows="3" 
-              placeholder="Describe detalladamente qué duda tienes sobre el caso, la norma o el proyecto..." 
+              placeholder="Escribe aquí tu duda jurídica, técnica o sobre el funcionamiento del sistema..." 
               class="w-full px-3.5 py-2.5 rounded-lg bg-slate-50 border border-slate-200 text-sm text-slate-800 placeholder:text-slate-400 focus:bg-white focus:outline-none focus:ring-2 focus:ring-slate-900/10 focus:border-slate-800 transition-all resize-none"
             ></textarea>
           </div>
@@ -340,11 +336,10 @@
           <div class="flex items-center justify-between flex-wrap gap-2 pt-1">
             <span class="text-xs text-slate-500 flex items-center gap-1">
               <span class="material-symbols-outlined text-[16px] text-emerald-600">cloud_done</span>
-              Se guarda automáticamente en la base de datos
+              Guardado automático en base de datos
             </span>
             <button 
               type="submit" 
-              id="btn-submit-question"
               class="px-5 py-2.5 rounded-xl bg-slate-900 hover:bg-slate-800 active:scale-[0.98] text-white font-semibold text-sm transition-all shadow-sm flex items-center gap-2"
             >
               <span class="material-symbols-outlined text-[18px]">send</span>
@@ -353,361 +348,756 @@
           </div>
         </form>
 
-        <!-- Contenedor de Preguntas Guardadas por la Comunidad -->
+        <!-- Lista de Dudas de la Comunidad -->
         <div class="mt-8 pt-6 border-t border-slate-200">
           <div class="flex items-center justify-between mb-4">
             <h4 class="font-headline font-semibold text-base sm:text-lg text-slate-900 flex items-center gap-2">
               <span class="material-symbols-outlined text-amber-700 text-[20px]">forum</span>
               Dudas de la Comunidad Registradas
             </h4>
-            <span id="community-count-badge" class="text-xs font-bold bg-slate-100 text-slate-700 px-2 py-0.5 rounded-full">
-              0 registradas
+            <span id="community-count-badge" class="text-xs font-bold bg-slate-100 text-slate-700 px-2.5 py-0.5 rounded-full">
+              Cargando...
             </span>
           </div>
 
           <div id="community-questions-list" class="space-y-3">
-            <!-- Inyectado dinámicamente -->
-            <p id="empty-community-msg" class="text-xs sm:text-sm text-slate-400 italic py-2">
-              Aún no hay dudas adicionales registradas por los estudiantes. ¡Sé el primero en preguntar!
-            </p>
+            <!-- Renderizado dinámico desde app.js -->
           </div>
         </div>
       </section>
 
     </section>
 
-    <!-- ======================================================== -->
-    <!-- PANELES DE LAS FUNCIONES 2, 3 Y 4 (VISTAS PREVIAS)       -->
-    <!-- ======================================================== -->
-
-    <!-- PANEL FUNCIÓN 2: GENERADOR DE PROMPTS -->
+    <!-- ========================================================== -->
+    <!-- FUNCIÓN 2: GENERADOR DE PROMPTS JURÍDICOS CON IA           -->
+    <!-- ========================================================== -->
     <section id="panel-prompt" class="hidden flex-col gap-6">
-      <div class="bg-white rounded-2xl p-6 border border-slate-200 shadow-sm">
-        <div class="inline-flex items-center gap-1.5 text-xs font-bold uppercase tracking-wider text-blue-700 bg-blue-50 px-2.5 py-1 rounded-md mb-2">
-          Función 2 · Próximo Módulo
+      
+      <!-- Banner Función 2 -->
+      <div class="bg-white rounded-2xl p-5 sm:p-6 border border-slate-200 shadow-sm relative overflow-hidden">
+        <div class="absolute -right-6 -bottom-6 opacity-5 pointer-events-none">
+          <span class="material-symbols-outlined text-[150px] text-slate-900">psychology</span>
         </div>
-        <h2 class="font-headline font-bold text-2xl text-slate-900">Generador de Prompts Penales con IA</h2>
-        <p class="text-slate-600 text-sm mt-2">
-          Esta función armará tu prompt especializado con contexto de la electiva y derecho penal usando los 3 campos clave: problema jurídico, delito aplicable y normas intentadas.
-        </p>
-        <div class="mt-6 p-4 rounded-xl bg-slate-50 border border-dashed border-slate-300 text-center text-slate-500 text-sm">
-          ⏳ <em>En cola de desarrollo: se implementará inmediatamente después de probar y subir la Función 1 a GitHub.</em>
+        <div class="relative z-10 max-w-2xl">
+          <div class="inline-flex items-center gap-1.5 text-xs font-bold uppercase tracking-wider text-amber-700 bg-amber-50 px-2.5 py-1 rounded-md mb-2">
+            <span class="material-symbols-outlined text-[16px]">smart_toy</span>
+            Función 2 · Ingeniería de Prompts Penales
+          </div>
+          <h2 class="font-headline font-bold text-2xl sm:text-3xl text-slate-900 leading-snug">
+            Generador de Prompts Jurídicos con IA
+          </h2>
+          <p class="text-sm sm:text-base text-slate-600 mt-2 leading-relaxed">
+            Estructura prompts hiper-especializados con el contexto de la electiva y el derecho penal colombiano. Funciona inmediatamente con el motor local o con la API de Google Gemini.
+          </p>
+        </div>
+
+        <!-- Conector Opcional de Gemini API Key -->
+        <div class="mt-4 p-3 bg-slate-50 border border-slate-200 rounded-xl flex flex-col sm:flex-row items-stretch sm:items-center justify-between gap-3 text-xs">
+          <div class="flex items-center gap-2">
+            <span class="material-symbols-outlined text-amber-600 text-[20px]">key</span>
+            <div>
+              <span class="font-bold text-slate-800">Conexión con Google Gemini (Opcional):</span>
+              <p class="text-slate-500">Si ingresas tu clave gratuita de Gemini, el modelo refinará tu prompt en tiempo real.</p>
+            </div>
+          </div>
+          <div class="flex items-center gap-2">
+            <input 
+              type="password" 
+              id="gemini-api-key-input" 
+              placeholder="Pega tu Gemini API Key..." 
+              class="px-3 py-1.5 rounded-lg bg-white border border-slate-300 text-xs text-slate-800 font-mono w-full sm:w-56 focus:outline-none focus:ring-2 focus:ring-amber-500"
+            >
+            <button 
+              type="button" 
+              onclick="saveGeminiKey()" 
+              class="px-3 py-1.5 rounded-lg bg-slate-800 hover:bg-slate-900 text-white font-semibold shrink-0 transition-colors"
+            >
+              Guardar
+            </button>
+          </div>
         </div>
       </div>
+
+      <!-- Formulario de los 3 Campos Jurídicos Obligatorios -->
+      <div class="grid grid-cols-1 lg:grid-cols-12 gap-6 items-start">
+        
+        <!-- Columna Izquierda: Formulario (7 columnas) -->
+        <div class="lg:col-span-7 bg-white rounded-2xl p-5 sm:p-6 border border-slate-200 shadow-sm flex flex-col gap-4">
+          <h3 class="font-headline font-bold text-lg sm:text-xl text-slate-900 flex items-center gap-2">
+            <span class="material-symbols-outlined text-amber-700 text-[22px]">tune</span>
+            Parámetros del Prompt Jurídico
+          </h3>
+
+          <form onsubmit="handleGeneratePrompt(event)" class="space-y-4">
+            
+            <!-- Campo 1: Problema Jurídico o Duda -->
+            <div>
+              <label for="prompt-duda" class="block text-xs font-bold uppercase tracking-wider text-slate-700 mb-1">
+                1. ¿Cuál es el problema jurídico o duda del caso? <span class="text-amber-700">*</span>
+              </label>
+              <textarea 
+                id="prompt-duda" 
+                required
+                rows="3" 
+                placeholder="Ej. Determinar si colocar a la víctima en estado de indefensión mediante engaño configura la circunstancia de agravación del numeral 7 del artículo 104 o si absorbe el abuso de confianza..." 
+                class="w-full px-3.5 py-2.5 rounded-lg bg-slate-50 border border-slate-200 text-sm text-slate-800 placeholder:text-slate-400 focus:bg-white focus:outline-none focus:ring-2 focus:ring-amber-500 transition-all resize-none font-sans"
+              ></textarea>
+            </div>
+
+            <!-- Campo 2: Módulo o Delito Aplicable -->
+            <div>
+              <label for="prompt-delito" class="block text-xs font-bold uppercase tracking-wider text-slate-700 mb-1">
+                2. ¿Para qué módulo o delito aplica? <span class="text-amber-700">*</span>
+              </label>
+              <input 
+                type="text" 
+                id="prompt-delito" 
+                required
+                placeholder="Ej. Homicidio Agravado (Art. 103/104) / Hurto Calificado / Dosificación en Cuartos" 
+                class="w-full px-3.5 py-2.5 rounded-lg bg-slate-50 border border-slate-200 text-sm text-slate-800 placeholder:text-slate-400 focus:bg-white focus:outline-none focus:ring-2 focus:ring-amber-500 transition-all"
+              >
+            </div>
+
+            <!-- Campo 3: Artículos o Normas Intentadas -->
+            <div>
+              <label for="prompt-normas" class="block text-xs font-bold uppercase tracking-wider text-slate-700 mb-1">
+                3. ¿Qué artículos o normas ya se han intentado aplicar?
+              </label>
+              <input 
+                type="text" 
+                id="prompt-normas" 
+                placeholder="Ej. Arts. 27 (Tentativa), 55 (Atenuantes), 58 (Agravantes), 61 (Cuartos), Ley 906 Art. 351" 
+                class="w-full px-3.5 py-2.5 rounded-lg bg-slate-50 border border-slate-200 text-sm text-slate-800 placeholder:text-slate-400 focus:bg-white focus:outline-none focus:ring-2 focus:ring-amber-500 transition-all"
+              >
+            </div>
+
+            <!-- Parámetros Adicionales de Contexto -->
+            <div class="grid grid-cols-1 sm:grid-cols-2 gap-3 pt-1">
+              <div>
+                <label for="prompt-rol" class="block text-xs font-bold uppercase tracking-wider text-slate-600 mb-1">
+                  Rol del Consultante
+                </label>
+                <select id="prompt-rol" class="w-full p-2.5 rounded-lg bg-slate-50 border border-slate-200 text-xs sm:text-sm text-slate-800 focus:bg-white focus:ring-2 focus:ring-amber-500">
+                  <option value="Estudiante de la Electiva de IA">Estudiante de la Electiva</option>
+                  <option value="Juez Penal de Circuito">Juez Penal de Circuito</option>
+                  <option value="Fiscal Delegado">Fiscal Delegado</option>
+                  <option value="Defensor Técnico">Defensor Técnico</option>
+                </select>
+              </div>
+              <div>
+                <label for="prompt-objetivo" class="block text-xs font-bold uppercase tracking-wider text-slate-600 mb-1">
+                  Objetivo del Análisis
+                </label>
+                <select id="prompt-objetivo" class="w-full p-2.5 rounded-lg bg-slate-50 border border-slate-200 text-xs sm:text-sm text-slate-800 focus:bg-white focus:ring-2 focus:ring-amber-500">
+                  <option value="Calcular los extremos y cuartos de punibilidad aplicables">Calcular Cuartos Punitivos</option>
+                  <option value="Redactar los hechos jurídicamente relevantes">Redactar Hechos Relevantes</option>
+                  <option value="Buscar jurisprudencia vinculante de la Corte Suprema">Jurisprudencia CSJ</option>
+                  <option value="Fundamentar un dictamen penal para la electiva">Dictamen para la Electiva</option>
+                </select>
+              </div>
+            </div>
+
+            <button 
+              type="submit" 
+              id="btn-generate-prompt"
+              class="w-full py-3 px-4 rounded-xl bg-slate-900 hover:bg-slate-800 active:scale-[0.99] text-white font-semibold text-sm transition-all shadow-md flex items-center justify-center gap-2"
+            >
+              <span class="material-symbols-outlined text-[18px] text-amber-400">auto_awesome</span>
+              <span>Armar Prompt Penal Especializado</span>
+            </button>
+
+          </form>
+        </div>
+
+        <!-- Columna Derecha: Resultado y Copiado Rápido (5 columnas) -->
+        <div class="lg:col-span-5 flex flex-col gap-4">
+          
+          <div id="prompt-result-container" class="hidden bg-white rounded-2xl p-5 border-2 border-amber-500 shadow-md flex flex-col gap-3">
+            <div class="flex items-center justify-between">
+              <span class="text-xs font-bold uppercase tracking-wider text-amber-800 flex items-center gap-1">
+                <span class="material-symbols-outlined text-[16px] text-amber-600">verified</span>
+                Prompt Generado con Éxito
+              </span>
+              <button 
+                type="button" 
+                onclick="copyPromptToClipboard()" 
+                class="px-3 py-1.5 rounded-lg bg-amber-600 hover:bg-amber-700 text-white font-semibold text-xs transition-colors flex items-center gap-1 shadow-sm"
+              >
+                <span class="material-symbols-outlined text-[16px]">content_copy</span>
+                <span>Copiar Prompt</span>
+              </button>
+            </div>
+
+            <textarea 
+              id="prompt-result-text" 
+              readonly 
+              rows="10" 
+              class="w-full p-3 rounded-lg bg-slate-50 border border-slate-200 text-xs sm:text-sm text-slate-800 font-mono leading-relaxed focus:outline-none resize-none"
+            ></textarea>
+            
+            <p class="text-xs text-slate-500 italic">
+              📋 Haz clic en «Copiar Prompt» y pégalo directamente en ChatGPT, Gemini o Claude para obtener una respuesta jurídica de nivel judicial.
+            </p>
+          </div>
+
+          <!-- Historial de Prompts Creados -->
+          <div class="bg-white rounded-2xl p-5 border border-slate-200 shadow-sm flex flex-col gap-3">
+            <div class="flex items-center justify-between">
+              <h4 class="font-headline font-semibold text-base text-slate-900 flex items-center gap-1.5">
+                <span class="material-symbols-outlined text-slate-400 text-[18px]">history</span>
+                Historial de Prompts Guardados
+              </h4>
+              <span class="text-[11px] font-bold text-slate-400 uppercase tracking-wider">Últimos 10</span>
+            </div>
+            
+            <div id="prompt-history-list" class="space-y-2 max-h-60 overflow-y-auto">
+              <!-- Renderizado desde app.js -->
+            </div>
+          </div>
+
+        </div>
+
+      </div>
+
     </section>
 
-    <!-- PANEL FUNCIÓN 3 -->
-    <section id="panel-funcion3" class="hidden flex-col gap-6">
-      <div class="bg-white rounded-2xl p-6 border border-slate-200 shadow-sm">
-        <div class="inline-flex items-center gap-1.5 text-xs font-bold uppercase tracking-wider text-purple-700 bg-purple-50 px-2.5 py-1 rounded-md mb-2">
-          Función 3 · Por Definir
+    <!-- ========================================================== -->
+    <!-- FUNCIÓN 3: CALCULADORA DE CUARTOS Y DOSIFICACIÓN PENAL     -->
+    <!-- ========================================================== -->
+    <section id="panel-calculadora" class="hidden flex-col gap-6">
+      
+      <!-- Banner Función 3 -->
+      <div class="bg-white rounded-2xl p-5 sm:p-6 border border-slate-200 shadow-sm relative overflow-hidden">
+        <div class="absolute -right-6 -bottom-6 opacity-5 pointer-events-none">
+          <span class="material-symbols-outlined text-[150px] text-slate-900">calculate</span>
         </div>
-        <h2 class="font-headline font-bold text-2xl text-slate-900">Módulo 3</h2>
-        <p class="text-slate-600 text-sm mt-2">
-          Este módulo está reservado para la tercera funcionalidad requerida por el proyecto.
+        <div class="relative z-10 max-w-2xl">
+          <div class="inline-flex items-center gap-1.5 text-xs font-bold uppercase tracking-wider text-amber-700 bg-amber-50 px-2.5 py-1 rounded-md mb-2">
+            <span class="material-symbols-outlined text-[16px]">gavel</span>
+            Función 3 · Dosificador Penal Institucional (Ley 599 de 2000)
+          </div>
+          <h2 class="font-headline font-bold text-2xl sm:text-3xl text-slate-900 leading-snug">
+            Calculadora de Cuartos de Dosificación
+          </h2>
+          <p class="text-sm sm:text-base text-slate-600 mt-2 leading-relaxed">
+            Segmenta automáticamente el ámbito punitivo en sus 4 cuartos (Art. 61 C.P.), evalúa circunstancias de menor y mayor punibilidad, y permite tasar la pena concreta con rebajas de ley.
+          </p>
+        </div>
+      </div>
+
+      <!-- Selector de Tipo Penal y Parámetros Base -->
+      <div class="bg-white rounded-2xl p-5 border border-slate-200 shadow-sm flex flex-col gap-4">
+        <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-3 border-b border-slate-100 pb-3">
+          <div>
+            <span class="text-xs font-bold uppercase tracking-wider text-slate-500 block">Tipo Penal Seleccionado</span>
+            <label for="calc-delito-select" class="sr-only">Selecciona Delito Penal</label>
+            <select 
+              id="calc-delito-select" 
+              onchange="handleDelitoChange()"
+              class="font-headline font-bold text-base sm:text-lg text-slate-900 bg-transparent focus:outline-none cursor-pointer mt-0.5"
+            >
+              <option value="homicidio_agravado" selected>Homicidio Agravado (Art. 103 / Art. 104 num. 7 C.P.)</option>
+              <option value="homicidio_simple">Homicidio Simple (Art. 103 C.P.)</option>
+              <option value="hurto_calificado">Hurto Calificado y Agravado (Art. 239 / 240 / 241 C.P.)</option>
+              <option value="trafico_estupefacientes">Tráfico de Estupefacientes (Art. 376 C.P.)</option>
+              <option value="concierto_delinquir">Concierto para Delinquir Agravado (Art. 340 C.P.)</option>
+              <option value="personalizado">Delito Personalizado (Ingresar meses libremente)</option>
+            </select>
+          </div>
+          <span id="calc-delito-desc" class="text-xs text-slate-500 max-w-md">
+            Pena fijada por la Ley 890 de 2004 con extremos de 400 a 600 meses (33.3 a 50 años).
+          </span>
+        </div>
+
+        <!-- Entradas de Extremos Base -->
+        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3">
+          <div>
+            <label for="calc-min-meses" class="block text-xs font-bold uppercase tracking-wider text-slate-600 mb-1">
+              Piso Legal Mínimo (Meses)
+            </label>
+            <input 
+              type="number" 
+              id="calc-min-meses" 
+              value="400" 
+              oninput="recalculateCuartos()"
+              class="w-full p-2.5 rounded-lg bg-slate-100 border border-slate-200 font-mono font-bold text-slate-700 cursor-not-allowed" 
+              readonly
+            >
+          </div>
+          <div>
+            <label for="calc-max-meses" class="block text-xs font-bold uppercase tracking-wider text-slate-600 mb-1">
+              Techo Legal Máximo (Meses)
+            </label>
+            <input 
+              type="number" 
+              id="calc-max-meses" 
+              value="600" 
+              oninput="recalculateCuartos()"
+              class="w-full p-2.5 rounded-lg bg-slate-100 border border-slate-200 font-mono font-bold text-slate-700 cursor-not-allowed" 
+              readonly
+            >
+          </div>
+
+          <!-- Modificador Tentativa -->
+          <div>
+            <label for="calc-tentativa" class="block text-xs font-bold uppercase tracking-wider text-slate-600 mb-1">
+              Tentativa (Art. 27 C.P.)
+            </label>
+            <select 
+              id="calc-tentativa" 
+              onchange="recalculateCuartos()"
+              class="w-full p-2.5 rounded-lg bg-slate-50 border border-slate-200 text-xs sm:text-sm text-slate-800"
+            >
+              <option value="consumado" selected>Consumación Típica (Sin rebaja)</option>
+              <option value="acabada">Tentativa Acabada (-1/2 a -2/3)</option>
+              <option value="desistida">Tentativa Desistida</option>
+            </select>
+          </div>
+
+          <!-- Modificador Participación -->
+          <div>
+            <label for="calc-participacion" class="block text-xs font-bold uppercase tracking-wider text-slate-600 mb-1">
+              Forma de Participación (Art. 30)
+            </label>
+            <select 
+              id="calc-participacion" 
+              onchange="recalculateCuartos()"
+              class="w-full p-2.5 rounded-lg bg-slate-50 border border-slate-200 text-xs sm:text-sm text-slate-800"
+            >
+              <option value="autor" selected>Autor / Coautor Pleno</option>
+              <option value="complice">Cómplice (-1/6 a -1/2)</option>
+            </select>
+          </div>
+        </div>
+
+        <div class="flex items-center gap-2 pt-1">
+          <input 
+            type="checkbox" 
+            id="calc-ira" 
+            onchange="recalculateCuartos()"
+            class="w-4 h-4 rounded text-amber-600 focus:ring-amber-500 border-slate-300"
+          >
+          <label for="calc-ira" class="text-xs sm:text-sm text-slate-700 font-medium cursor-pointer">
+            Acredita estado de Ira o Intenso Dolor (Art. 57 C.P. — Atenuación de 1/6 a 1/2)
+          </label>
+        </div>
+
+        <p id="calc-error-msg" class="hidden text-xs text-red-600 font-semibold">
+          ⚠️ El límite máximo debe ser estrictamente mayor que el límite mínimo.
         </p>
       </div>
+
+      <!-- Sumario Matemático de Nuevos Límites (Paso 1) -->
+      <div class="grid grid-cols-1 sm:grid-cols-3 gap-3">
+        <div class="bg-white p-4 rounded-xl border border-slate-200 shadow-sm">
+          <span class="text-xs font-bold uppercase tracking-wider text-slate-500 block">Límite Mínimo Operativo</span>
+          <div id="lbl-min-operativo" class="font-mono font-bold text-xl text-slate-900 mt-1">400 meses</div>
+          <span id="lbl-min-operativo-conversion" class="text-xs text-slate-500 font-mono mt-0.5 block">33 años, 4 meses</span>
+        </div>
+
+        <div class="bg-white p-4 rounded-xl border border-slate-200 shadow-sm">
+          <span class="text-xs font-bold uppercase tracking-wider text-slate-500 block">Límite Máximo Operativo</span>
+          <div id="lbl-max-operativo" class="font-mono font-bold text-xl text-slate-900 mt-1">600 meses</div>
+          <span id="lbl-max-operativo-conversion" class="text-xs text-slate-500 font-mono mt-0.5 block">50 años, 0 meses</span>
+        </div>
+
+        <div class="bg-amber-50/70 p-4 rounded-xl border border-amber-200 shadow-sm">
+          <span class="text-xs font-bold uppercase tracking-wider text-amber-900 block">Ámbito Punitivo Total</span>
+          <div id="lbl-ambito-total" class="font-mono font-bold text-xl text-amber-900 mt-1">200 meses</div>
+          <span id="lbl-extension-cuarto" class="text-xs text-amber-800 font-semibold mt-0.5 block">Extensión Cuarto: 50 meses</span>
+        </div>
+      </div>
+
+      <!-- Representación Visual de los 4 Cuartos (Paso 2) -->
+      <div class="bg-white rounded-2xl p-5 border border-slate-200 shadow-sm flex flex-col gap-4">
+        <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-2 border-b border-slate-100 pb-3">
+          <div class="flex items-center gap-2">
+            <span class="w-6 h-6 rounded bg-slate-900 text-white flex items-center justify-center font-mono font-bold text-xs">2</span>
+            <h3 class="font-headline font-bold text-lg text-slate-900">
+              División en Cuartos de Dosificación (Art. 61 C.P.)
+            </h3>
+          </div>
+          <span id="calc-quarter-reason" class="text-xs font-medium text-amber-800 bg-amber-50 px-2.5 py-1 rounded-full border border-amber-200">
+            Cargando criterio...
+          </span>
+        </div>
+
+        <!-- Matriz de las 4 Tarjetas -->
+        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3">
+          
+          <!-- Cuarto 1: Mínimo -->
+          <div id="card-cuarto-1" class="relative rounded-xl p-4 bg-white border-2 border-amber-600 shadow-md flex flex-col justify-between transition-all">
+            <div>
+              <div class="flex items-center justify-between">
+                <span class="text-xs font-bold uppercase tracking-wider text-amber-800">1° Cuarto Mínimo</span>
+                <span class="material-symbols-outlined text-[18px] text-amber-700">lock</span>
+              </div>
+              <div id="cuarto-1-range" class="font-mono font-bold text-lg text-slate-900 mt-2">400 a 450 m</div>
+              <p id="cuarto-1-conv" class="text-xs text-slate-500 font-mono mt-1">33a 4m hasta 37a 6m</p>
+            </div>
+            <div class="quarter-badge mt-3 pt-1.5 pb-1 bg-amber-50 text-amber-900 rounded text-center text-[11px] font-bold uppercase tracking-wider block border border-amber-200">
+              Ámbito Aplicable
+            </div>
+          </div>
+
+          <!-- Cuarto 2: Medio Inferior -->
+          <div id="card-cuarto-2" class="relative rounded-xl p-4 bg-slate-50 border border-slate-200 opacity-60 flex flex-col justify-between transition-all">
+            <div>
+              <div class="flex items-center justify-between">
+                <span class="text-xs font-bold uppercase tracking-wider text-slate-600">2° Medio Inferior</span>
+              </div>
+              <div id="cuarto-2-range" class="font-mono font-bold text-lg text-slate-800 mt-2">450 a 500 m</div>
+              <p id="cuarto-2-conv" class="text-xs text-slate-500 font-mono mt-1">37a 6m hasta 41a 8m</p>
+            </div>
+            <div class="quarter-badge mt-3 pt-1.5 pb-1 bg-slate-100 text-slate-400 rounded text-center text-[11px] font-semibold uppercase tracking-wider block">
+              Inaplicable
+            </div>
+          </div>
+
+          <!-- Cuarto 3: Medio Superior -->
+          <div id="card-cuarto-3" class="relative rounded-xl p-4 bg-slate-50 border border-slate-200 opacity-60 flex flex-col justify-between transition-all">
+            <div>
+              <div class="flex items-center justify-between">
+                <span class="text-xs font-bold uppercase tracking-wider text-slate-600">3° Medio Superior</span>
+              </div>
+              <div id="cuarto-3-range" class="font-mono font-bold text-lg text-slate-800 mt-2">500 a 550 m</div>
+              <p id="cuarto-3-conv" class="text-xs text-slate-500 font-mono mt-1">41a 8m hasta 45a 10m</p>
+            </div>
+            <div class="quarter-badge mt-3 pt-1.5 pb-1 bg-slate-100 text-slate-400 rounded text-center text-[11px] font-semibold uppercase tracking-wider block">
+              Inaplicable
+            </div>
+          </div>
+
+          <!-- Cuarto 4: Máximo -->
+          <div id="card-cuarto-4" class="relative rounded-xl p-4 bg-slate-50 border border-slate-200 opacity-60 flex flex-col justify-between transition-all">
+            <div>
+              <div class="flex items-center justify-between">
+                <span class="text-xs font-bold uppercase tracking-wider text-slate-600">4° Cuarto Máximo</span>
+              </div>
+              <div id="cuarto-4-range" class="font-mono font-bold text-lg text-slate-800 mt-2">550 a 600 m</div>
+              <p id="cuarto-4-conv" class="text-xs text-slate-500 font-mono mt-1">45a 10m hasta 50a 0m</p>
+            </div>
+            <div class="quarter-badge mt-3 pt-1.5 pb-1 bg-slate-100 text-slate-400 rounded text-center text-[11px] font-semibold uppercase tracking-wider block">
+              Inaplicable
+            </div>
+          </div>
+
+        </div>
+      </div>
+
+      <!-- Evaluación de Circunstancias (Arts. 55 y 58 C.P.) (Paso 3) -->
+      <div class="bg-white rounded-2xl p-5 border border-slate-200 shadow-sm flex flex-col gap-4">
+        <div class="flex items-center justify-between border-b border-slate-100 pb-3">
+          <div class="flex items-center gap-2">
+            <span class="w-6 h-6 rounded bg-slate-900 text-white flex items-center justify-center font-mono font-bold text-xs">3</span>
+            <h3 class="font-headline font-bold text-lg text-slate-900">
+              Circunstancias Taxativas de Punibilidad
+            </h3>
+          </div>
+          <div class="flex items-center gap-2 text-xs font-mono">
+            <span id="lbl-art55-count" class="px-2 py-0.5 rounded bg-emerald-100 text-emerald-800 font-bold">2 acreditadas</span>
+            <span id="lbl-art58-count" class="px-2 py-0.5 rounded bg-red-100 text-red-800 font-bold">0 acreditadas</span>
+          </div>
+        </div>
+
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+          
+          <!-- Columna Art. 55: Menor Punibilidad -->
+          <div class="p-3 bg-emerald-50/50 border border-emerald-200 rounded-xl space-y-2">
+            <span class="text-xs font-bold uppercase tracking-wider text-emerald-900 block mb-2 flex items-center gap-1">
+              <span class="material-symbols-outlined text-[16px] text-emerald-700">remove_circle</span>
+              Menor Punibilidad (Art. 55 C.P.)
+            </span>
+            <label class="flex items-start gap-2 text-xs text-slate-700 cursor-pointer">
+              <input type="checkbox" class="chk-art55 mt-0.5 rounded text-emerald-600 focus:ring-emerald-500" checked onchange="recalculateCuartos()">
+              <span><strong>Num. 1:</strong> Carencia de antecedentes penales.</span>
+            </label>
+            <label class="flex items-start gap-2 text-xs text-slate-700 cursor-pointer">
+              <input type="checkbox" class="chk-art55 mt-0.5 rounded text-emerald-600 focus:ring-emerald-500" checked onchange="recalculateCuartos()">
+              <span><strong>Num. 2:</strong> Estado de indigencia o condiciones de inferioridad personal.</span>
+            </label>
+            <label class="flex items-start gap-2 text-xs text-slate-700 cursor-pointer">
+              <input type="checkbox" class="chk-art55 mt-0.5 rounded text-emerald-600 focus:ring-emerald-500" onchange="recalculateCuartos()">
+              <span><strong>Num. 5:</strong> Reparación voluntaria del daño antes del juicio.</span>
+            </label>
+            <label class="flex items-start gap-2 text-xs text-slate-700 cursor-pointer">
+              <input type="checkbox" class="chk-art55 mt-0.5 rounded text-emerald-600 focus:ring-emerald-500" onchange="recalculateCuartos()">
+              <span><strong>Num. 6:</strong> Presentación voluntaria a las autoridades.</span>
+            </label>
+          </div>
+
+          <!-- Columna Art. 58: Mayor Punibilidad -->
+          <div class="p-3 bg-red-50/50 border border-red-200 rounded-xl space-y-2">
+            <span class="text-xs font-bold uppercase tracking-wider text-red-900 block mb-2 flex items-center gap-1">
+              <span class="material-symbols-outlined text-[16px] text-red-700">add_circle</span>
+              Mayor Punibilidad (Art. 58 C.P.)
+            </span>
+            <label class="flex items-start gap-2 text-xs text-slate-700 cursor-pointer">
+              <input type="checkbox" class="chk-art58 mt-0.5 rounded text-red-600 focus:ring-red-500" onchange="recalculateCuartos()">
+              <span><strong>Num. 1:</strong> Ejecutar la conducta sobre persona en indefensión o menor.</span>
+            </label>
+            <label class="flex items-start gap-2 text-xs text-slate-700 cursor-pointer">
+              <input type="checkbox" class="chk-art58 mt-0.5 rounded text-red-600 focus:ring-red-500" onchange="recalculateCuartos()">
+              <span><strong>Num. 10:</strong> Pluralidad de copartícipes en la ejecución.</span>
+            </label>
+            <label class="flex items-start gap-2 text-xs text-slate-700 cursor-pointer">
+              <input type="checkbox" class="chk-art58 mt-0.5 rounded text-red-600 focus:ring-red-500" onchange="recalculateCuartos()">
+              <span><strong>Num. 13:</strong> Posición distinguida del autor en la sociedad.</span>
+            </label>
+            <label class="flex items-start gap-2 text-xs text-slate-700 cursor-pointer">
+              <input type="checkbox" class="chk-art58 mt-0.5 rounded text-red-600 focus:ring-red-500" onchange="recalculateCuartos()">
+              <span><strong>Num. 15:</strong> Utilización deliberada de armas o sevicia.</span>
+            </label>
+          </div>
+
+        </div>
+      </div>
+
+      <!-- Tasación Individual Motivada y Rebaja por Allanamiento (Paso 4) -->
+      <div class="bg-white rounded-2xl p-5 border border-slate-200 shadow-sm flex flex-col gap-4">
+        <div class="flex items-center gap-2 border-b border-slate-100 pb-3">
+          <span class="w-6 h-6 rounded bg-slate-900 text-white flex items-center justify-center font-mono font-bold text-xs">4</span>
+          <h3 class="font-headline font-bold text-lg text-slate-900">
+            Tasación Individual Motivada & Rebaja Procesal (Ley 906)
+          </h3>
+        </div>
+
+        <div class="grid grid-cols-1 lg:grid-cols-12 gap-6 items-center">
+          
+          <!-- Controles del Slider y Rebaja (7 cols) -->
+          <div class="lg:col-span-7 space-y-4">
+            <div>
+              <div class="flex items-center justify-between mb-1">
+                <span class="text-xs font-bold uppercase tracking-wider text-slate-700">
+                  Pena Individual Seleccionada (Dentro del Cuarto Aplicable)
+                </span>
+                <span id="lbl-tasacion-individual" class="font-mono font-bold text-amber-700 text-sm">412 meses</span>
+              </div>
+              <input 
+                type="range" 
+                id="slider-pena-individual" 
+                min="400" 
+                max="450" 
+                value="412" 
+                step="0.5" 
+                oninput="updatePenaFinal()"
+                class="w-full h-2 bg-slate-200 rounded-lg cursor-pointer"
+              >
+              <div class="flex items-center justify-between text-xs text-slate-400 font-mono mt-1">
+                <span>Piso del Cuarto</span>
+                <span id="lbl-tasacion-conversion" class="text-slate-600 font-semibold">34 años, 4 meses</span>
+                <span>Techo del Cuarto</span>
+              </div>
+            </div>
+
+            <!-- Selector de Rebaja por Allanamiento o Preacuerdo -->
+            <div>
+              <label for="calc-rebaja-select" class="block text-xs font-bold uppercase tracking-wider text-slate-700 mb-1">
+                Mecanismo de Terminación Anticipada (Ley 906 de 2004)
+              </label>
+              <select 
+                id="calc-rebaja-select" 
+                onchange="updatePenaFinal()"
+                class="w-full p-2.5 rounded-lg bg-slate-50 border border-slate-200 text-xs sm:text-sm text-slate-800"
+              >
+                <option value="50" selected>Allanamiento en Imputación (Art. 351 — Hasta el 50% de rebaja)</option>
+                <option value="33.33">Allanamiento en Acusación (Art. 352 — Hasta 1/3 de rebaja)</option>
+                <option value="16.66">Allanamiento en Juicio Oral (Art. 353 — 1/6 de rebaja)</option>
+                <option value="0">Sin rebaja por allanamiento (Juicio oral pleno)</option>
+              </select>
+            </div>
+          </div>
+
+          <!-- Cuadro de Pena Definitiva (5 cols) -->
+          <div class="lg:col-span-5 bg-slate-900 text-white rounded-xl p-5 shadow-lg flex flex-col justify-between">
+            <div>
+              <span class="text-[11px] font-bold uppercase tracking-wider text-amber-400 block">
+                Pena Privativa de la Libertad Definitiva
+              </span>
+              <div id="lbl-pena-final" class="font-mono font-bold text-3xl sm:text-4xl text-white mt-1">
+                206 meses
+              </div>
+              <span id="lbl-pena-final-conversion" class="text-xs text-slate-300 font-mono mt-1 block">
+                17 años, 2 meses de Prisión
+              </span>
+            </div>
+
+            <div class="mt-4 pt-3 border-t border-slate-800 flex items-center justify-between text-xs text-slate-400">
+              <span>Descuento aplicado:</span>
+              <span id="lbl-rebaja-monto" class="font-mono text-emerald-400 font-bold">-50% (206 meses)</span>
+            </div>
+          </div>
+
+        </div>
+
+        <!-- Dictamen y Memoria de Cálculo Exportable -->
+        <div class="mt-4 pt-4 border-t border-slate-100 flex flex-col gap-2">
+          <div class="flex items-center justify-between">
+            <span class="text-xs font-bold uppercase tracking-wider text-slate-600 flex items-center gap-1">
+              <span class="material-symbols-outlined text-[16px]">receipt_long</span>
+              Memoria de Cálculo y Dictamen Jurídico
+            </span>
+            <button 
+              type="button" 
+              onclick="copyDictamen()"
+              class="px-3 py-1.5 rounded-lg bg-slate-800 hover:bg-slate-900 text-white font-semibold text-xs transition-colors flex items-center gap-1"
+            >
+              <span class="material-symbols-outlined text-[16px]">content_copy</span>
+              <span>Copiar Dictamen</span>
+            </button>
+          </div>
+          <textarea 
+            id="dictamen-text-export" 
+            readonly 
+            rows="6" 
+            class="w-full p-3 rounded-lg bg-slate-50 border border-slate-200 text-xs text-slate-700 font-mono leading-relaxed resize-none focus:outline-none"
+          ></textarea>
+        </div>
+
+      </div>
+
     </section>
 
-    <!-- PANEL FUNCIÓN 4: ESCRIBIR AL PROFESOR -->
+    <!-- ========================================================== -->
+    <!-- FUNCIÓN 4: ESCRIBIR AL PROFESOR (ACCESO RÁPIDO)            -->
+    <!-- ========================================================== -->
     <section id="panel-docente" class="hidden flex-col gap-6">
-      <div class="bg-white rounded-2xl p-6 border border-slate-200 shadow-sm">
-        <div class="inline-flex items-center gap-1.5 text-xs font-bold uppercase tracking-wider text-emerald-700 bg-emerald-50 px-2.5 py-1 rounded-md mb-2">
-          Función 4 · Contacto Rápido
+      
+      <div class="bg-white rounded-2xl p-6 sm:p-8 border border-slate-200 shadow-sm relative overflow-hidden max-w-2xl mx-auto w-full text-center">
+        <div class="w-16 h-16 rounded-2xl bg-slate-900 text-amber-500 flex items-center justify-center mx-auto mb-4 shadow-md">
+          <span class="material-symbols-outlined text-[36px]">mail</span>
         </div>
-        <h2 class="font-headline font-bold text-2xl text-slate-900">Contacto con el Docente</h2>
-        <p class="text-slate-600 text-sm mt-2">
-          Acceso de un solo clic para abrir Gmail o copiar el correo oficial del profesor para el prototipo.
+        
+        <div class="inline-flex items-center gap-1.5 text-xs font-bold uppercase tracking-wider text-amber-700 bg-amber-50 px-2.5 py-1 rounded-md mb-2">
+          Función 4 · Canal de Soporte Directo
+        </div>
+        
+        <h2 class="font-headline font-bold text-2xl sm:text-3xl text-slate-900">
+          Contacto con el Docente
+        </h2>
+        
+        <p class="text-sm sm:text-base text-slate-600 mt-2 max-w-lg mx-auto leading-relaxed">
+          Usa este acceso directo para abrir tu cliente de correo (Gmail, Outlook) con la plantilla del proyecto lista, o copia la dirección en un solo clic.
         </p>
-        <div class="mt-6 flex flex-col sm:flex-row gap-3">
-          <a href="mailto:profesor@universidad.edu.co?subject=Consulta%20Electiva%20IA%20-%20Proyecto%20Dosificador" class="px-5 py-3 rounded-xl bg-slate-900 text-white font-semibold text-sm flex items-center justify-center gap-2 hover:bg-slate-800 transition-colors">
-            <span class="material-symbols-outlined text-[18px]">outgoing_mail</span>
-            <span>Abrir Correo en Gmail / Mail</span>
-          </a>
-          <button onclick="navigator.clipboard.writeText('profesor@universidad.edu.co'); alert('¡Correo del docente copiado al portapapeles!');" class="px-5 py-3 rounded-xl bg-slate-100 text-slate-800 font-semibold text-sm flex items-center justify-center gap-2 hover:bg-slate-200 transition-colors">
-            <span class="material-symbols-outlined text-[18px]">content_copy</span>
+
+        <!-- Tarjeta de Correo Oficial -->
+        <div class="my-6 p-4 rounded-xl bg-slate-50 border border-slate-200 flex flex-col sm:flex-row items-center justify-between gap-3 text-left">
+          <div class="flex items-center gap-3">
+            <span class="material-symbols-outlined text-amber-700 text-[24px]">school</span>
+            <div>
+              <span class="text-xs font-bold uppercase tracking-wider text-slate-500 block">Correo Oficial del Docente</span>
+              <span class="teacher-email-label font-mono font-bold text-slate-900 text-sm sm:text-base">profesor@universidad.edu.co</span>
+            </div>
+          </div>
+          <button 
+            type="button" 
+            onclick="updateTeacherEmail()" 
+            class="text-xs text-slate-500 hover:text-slate-800 underline transition-colors"
+            title="Cambiar correo para el prototipo"
+          >
+            Editar correo
+          </button>
+        </div>
+
+        <!-- Botones de Acción Inmediata -->
+        <div class="flex flex-col sm:flex-row items-center justify-center gap-3">
+          <button 
+            type="button" 
+            onclick="openTeacherEmail()" 
+            class="w-full sm:w-auto px-6 py-3 rounded-xl bg-slate-900 hover:bg-slate-800 active:scale-[0.98] text-white font-semibold text-sm transition-all shadow-md flex items-center justify-center gap-2"
+          >
+            <span class="material-symbols-outlined text-[20px] text-amber-400">outgoing_mail</span>
+            <span>Abrir en Gmail / Correo</span>
+          </button>
+          
+          <button 
+            type="button" 
+            onclick="copyTeacherEmail()" 
+            class="w-full sm:w-auto px-6 py-3 rounded-xl bg-slate-100 hover:bg-slate-200 active:scale-[0.98] text-slate-800 font-semibold text-sm transition-all border border-slate-200 flex items-center justify-center gap-2"
+          >
+            <span class="material-symbols-outlined text-[20px]">content_copy</span>
             <span>Copiar Correo</span>
           </button>
         </div>
       </div>
+
     </section>
 
   </main>
 
-  <!-- ========================================== -->
-  <!-- BARRA DE NAVEGACIÓN INFERIOR PARA CELULARES-->
-  <!-- ========================================== -->
-  <nav class="md:hidden sticky bottom-0 z-50 bg-white/95 backdrop-blur border-t border-slate-200 py-2 px-3 flex items-center justify-around shadow-lg">
-    <button onclick="switchTab('faq')" id="mobile-tab-1" class="flex flex-col items-center gap-0.5 text-slate-900 font-semibold">
+  <!-- ============================================================ -->
+  <!-- MODAL DE CONFIGURACIÓN Y ESTADO DE BASE DE DATOS (FIREBASE) -->
+  <!-- ============================================================ -->
+  <div id="db-config-modal" class="hidden fixed inset-0 z-50 bg-slate-900/60 backdrop-blur-sm flex items-center justify-center p-4">
+    <div class="bg-white rounded-2xl max-w-lg w-full p-6 shadow-2xl border border-slate-200 flex flex-col gap-4 max-h-[90vh] overflow-y-auto">
+      <div class="flex items-center justify-between border-b border-slate-100 pb-3">
+        <div class="flex items-center gap-2">
+          <span class="material-symbols-outlined text-amber-600 text-[24px]">database</span>
+          <h3 class="font-headline font-bold text-lg text-slate-900">Estado de la Base de Datos</h3>
+        </div>
+        <button onclick="closeDatabaseStatusModal()" class="text-slate-400 hover:text-slate-600 p-1">
+          <span class="material-symbols-outlined text-[20px]">close</span>
+        </button>
+      </div>
+
+      <div class="p-3.5 bg-emerald-50 border border-emerald-200 rounded-xl flex items-center gap-3">
+        <span class="w-3 h-3 rounded-full bg-emerald-500 shrink-0"></span>
+        <div class="text-xs text-emerald-900">
+          <strong>Base de datos local activa:</strong> Todas las preguntas, respuestas y prompts se guardan inmediatamente en tu navegador y persisten aunque recargues la página.
+        </div>
+      </div>
+
+      <div class="text-xs text-slate-600 space-y-2">
+        <p class="font-bold text-slate-800">¿Cómo conectar Google Firebase Firestore (Gratis) al final?</p>
+        <ol class="list-decimal list-inside space-y-1 text-slate-500">
+          <li>Crea un proyecto en <a href="https://console.firebase.google.com/" target="_blank" class="text-amber-700 underline font-medium">Firebase Console</a>.</li>
+          <li>Activa <strong>Firestore Database</strong> en modo de prueba.</li>
+          <li>Abre el archivo [firebase-config.js](file:///c:/Users/Usuario/OneDrive/Documentos/ELECTIVA%20IA/firebase-config.js) y pega tus credenciales de app web.</li>
+        </ol>
+      </div>
+
+      <div class="flex justify-end gap-2 pt-2 border-t border-slate-100">
+        <button onclick="testDatabaseConnection()" class="px-4 py-2 rounded-lg bg-slate-100 hover:bg-slate-200 text-slate-800 text-xs font-semibold">
+          Probar Conexión
+        </button>
+        <button onclick="closeDatabaseStatusModal()" class="px-4 py-2 rounded-lg bg-slate-900 text-white text-xs font-semibold">
+          Entendido
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- ============================================================ -->
+  <!-- BARRA DE NAVEGACIÓN INFERIOR PARA CELULARES (STICKY FOOTER)   -->
+  <!-- ============================================================ -->
+  <nav class="md:hidden fixed bottom-0 left-0 right-0 z-50 bg-white/95 backdrop-blur border-t border-slate-200 py-2 px-3 flex items-center justify-around shadow-lg">
+    <button onclick="switchTab('faq')" id="mobile-tab-1" class="flex flex-col items-center gap-0.5 text-slate-900 font-bold">
       <span class="material-symbols-outlined text-[22px]">quiz</span>
       <span class="text-[10px]">1. FAQs</span>
     </button>
     <button onclick="switchTab('prompt')" id="mobile-tab-2" class="flex flex-col items-center gap-0.5 text-slate-400 hover:text-slate-700">
-      <span class="material-symbols-outlined text-[22px]">smart_toy</span>
+      <span class="material-symbols-outlined text-[22px]">psychology</span>
       <span class="text-[10px]">2. Prompts</span>
     </button>
-    <button onclick="switchTab('funcion3')" id="mobile-tab-3" class="flex flex-col items-center gap-0.5 text-slate-400 hover:text-slate-700">
-      <span class="material-symbols-outlined text-[22px]">balance</span>
-      <span class="text-[10px]">3. Función 3</span>
+    <button onclick="switchTab('calculadora')" id="mobile-tab-3" class="flex flex-col items-center gap-0.5 text-slate-400 hover:text-slate-700">
+      <span class="material-symbols-outlined text-[22px]">calculate</span>
+      <span class="text-[10px]">3. Cuartos</span>
     </button>
     <button onclick="switchTab('docente')" id="mobile-tab-4" class="flex flex-col items-center gap-0.5 text-slate-400 hover:text-slate-700">
       <span class="material-symbols-outlined text-[22px]">mail</span>
-      <span class="text-[10px]">4. Contacto</span>
+      <span class="text-[10px]">4. Profesor</span>
     </button>
   </nav>
 
-  <!-- ========================================== -->
-  <!-- PIE DE PÁGINA                              -->
-  <!-- ========================================== -->
-  <footer class="bg-white border-t border-slate-200 py-4 text-center text-xs text-slate-500">
-    <p>Electiva de Inteligencia Artificial · Prototipo Funcional sin Servidor · 100% Client-Side</p>
+  <!-- ============================================================ -->
+  <!-- PIE DE PÁGINA (DESKTOP)                                      -->
+  <!-- ============================================================ -->
+  <footer class="hidden md:block bg-white border-t border-slate-200 py-4 text-center text-xs text-slate-500">
+    <p>Electiva de Inteligencia Artificial · Dosificador Penal Colombia (Ley 599 de 2000) · Prototipo Funcional Client-Side</p>
   </footer>
 
-  <!-- ========================================== -->
-  <!-- JAVASCRIPT DE LA APLICACIÓN                -->
-  <!-- ========================================== -->
-  <script>
-    // ------------------------------------------------------------
-    // 1. GESTIÓN DE PESTAÑAS (TABS)
-    // ------------------------------------------------------------
-    function switchTab(tabName) {
-      const panels = {
-        'faq': document.getElementById('panel-faq'),
-        'prompt': document.getElementById('panel-prompt'),
-        'funcion3': document.getElementById('panel-funcion3'),
-        'docente': document.getElementById('panel-docente')
-      };
-
-      // Ocultar todos los paneles y mostrar el seleccionado
-      Object.keys(panels).forEach(key => {
-        if (key === tabName) {
-          panels[key].classList.remove('hidden');
-          panels[key].classList.add('flex');
-        } else {
-          panels[key].classList.add('hidden');
-          panels[key].classList.remove('flex');
-        }
-      });
-
-      // Actualizar estilos activos de navegación escritorio y móvil
-      const tabs = ['faq', 'prompt', 'funcion3', 'docente'];
-      tabs.forEach((key, index) => {
-        const desktopBtn = document.getElementById(`nav-tab-${index + 1}`);
-        const mobileBtn = document.getElementById(`mobile-tab-${index + 1}`);
-        
-        if (key === tabName) {
-          if (desktopBtn) {
-            desktopBtn.className = "px-3 py-1.5 rounded-lg bg-slate-900 text-white font-semibold transition-all flex items-center gap-1.5 shadow-sm";
-          }
-          if (mobileBtn) {
-            mobileBtn.className = "flex flex-col items-center gap-0.5 text-slate-900 font-semibold";
-          }
-        } else {
-          if (desktopBtn) {
-            desktopBtn.className = "px-3 py-1.5 rounded-lg text-slate-600 hover:text-slate-900 hover:bg-slate-100 transition-all flex items-center gap-1.5";
-          }
-          if (mobileBtn) {
-            mobileBtn.className = "flex flex-col items-center gap-0.5 text-slate-400 hover:text-slate-700";
-          }
-        }
-      });
-
-      window.scrollTo({ top: 0, behavior: 'smooth' });
-    }
-
-    // ------------------------------------------------------------
-    // 2. ACORDEONES INTERACTIVOS DE PREGUNTAS FRECUENTES
-    // ------------------------------------------------------------
-    function toggleFAQ(button) {
-      const card = button.closest('.faq-card');
-      const answer = card.querySelector('.faq-answer');
-      const icon = button.querySelector('.faq-icon');
-      
-      const isOpen = answer.style.display === 'block';
-
-      if (isOpen) {
-        answer.style.display = 'none';
-        icon.style.transform = 'rotate(0deg)';
-        card.classList.remove('ring-1', 'ring-slate-900/10');
-      } else {
-        answer.style.display = 'block';
-        icon.style.transform = 'rotate(180deg)';
-        card.classList.add('ring-1', 'ring-slate-900/10');
-      }
-    }
-
-    // ------------------------------------------------------------
-    // 3. BUSCADOR EN VIVO DE PREGUNTAS FRECUENTES
-    // ------------------------------------------------------------
-    function filterFAQ() {
-      const query = document.getElementById('faq-search').value.toLowerCase().trim();
-      const clearBtn = document.getElementById('faq-clear-search');
-      const cards = document.querySelectorAll('.faq-card');
-      let visibleCount = 0;
-
-      if (query.length > 0) {
-        clearBtn.classList.remove('hidden');
-      } else {
-        clearBtn.classList.add('hidden');
-      }
-
-      cards.forEach(card => {
-        const text = card.textContent.toLowerCase();
-        const keywords = card.getAttribute('data-keywords') || '';
-        
-        if (text.includes(query) || keywords.includes(query)) {
-          card.classList.remove('hidden');
-          visibleCount++;
-        } else {
-          card.classList.add('hidden');
-        }
-      });
-
-      const noResults = document.getElementById('no-faq-results');
-      if (visibleCount === 0) {
-        noResults.classList.remove('hidden');
-      } else {
-        noResults.classList.add('hidden');
-      }
-    }
-
-    function clearSearch() {
-      const searchInput = document.getElementById('faq-search');
-      searchInput.value = '';
-      filterFAQ();
-      searchInput.focus();
-    }
-
-    // ------------------------------------------------------------
-    // 4. BANCO DE PREGUNTAS COLABORATIVO (BASE DE DATOS)
-    // ------------------------------------------------------------
-    const STORAGE_KEY = 'electiva_ia_community_questions_v1';
-
-    // Preguntas precargadas con respuestas demostrativas
-    const DEFAULT_COMMUNITY_QUESTIONS = [
-      {
-        id: 'q_demo_1',
-        author: 'Estudiante Electiva',
-        category: 'Delitos y Código Penal',
-        date: '2026-10-27',
-        question: '¿Qué diferencia hay entre la circunstancia de sevicia y los motivos abyectos o fútiles?',
-        answer: 'La sevicia (Art. 104 num. 7) se refiere al modo de ejecución cruel que incrementa innecesariamente el dolor de la víctima antes de morir. Los motivos abyectos o fútiles (Art. 104 num. 4 y 5) aluden a la motivación inmoral o insignificante del autor. Ambos son causales de agravación punitiva distintas.',
-        answeredBy: 'Docente Titular'
-      }
-    ];
-
-    function loadQuestions() {
-      let questions = [];
-      try {
-        const raw = localStorage.getItem(STORAGE_KEY);
-        if (raw) {
-          questions = JSON.parse(raw);
-        } else {
-          questions = DEFAULT_COMMUNITY_QUESTIONS;
-          localStorage.setItem(STORAGE_KEY, JSON.stringify(questions));
-        }
-      } catch (e) {
-        questions = DEFAULT_COMMUNITY_QUESTIONS;
-      }
-      renderCommunityQuestions(questions);
-    }
-
-    function renderCommunityQuestions(questions) {
-      const container = document.getElementById('community-questions-list');
-      const badge = document.getElementById('community-count-badge');
-      badge.textContent = `${questions.length} registrada${questions.length === 1 ? '' : 's'}`;
-
-      if (questions.length === 0) {
-        container.innerHTML = `
-          <p class="text-xs sm:text-sm text-slate-400 italic py-2">
-            Aún no hay dudas adicionales registradas por los estudiantes. ¡Sé el primero en preguntar!
-          </p>
-        `;
-        return;
-      }
-
-      container.innerHTML = questions.map(q => {
-        const hasAnswer = q.answer && q.answer.trim().length > 0;
-        return `
-          <div class="faq-card bg-slate-50 border border-slate-200 rounded-xl p-4 transition-all hover:bg-white hover:border-slate-300" data-keywords="${q.question.toLowerCase()} ${q.category.toLowerCase()} ${q.author.toLowerCase()}">
-            <div class="flex items-center justify-between gap-2 mb-2">
-              <div class="flex items-center gap-1.5 flex-wrap">
-                <span class="text-[11px] font-bold bg-amber-100 text-amber-800 px-2 py-0.5 rounded uppercase">
-                  ${q.category || 'Consulta'}
-                </span>
-                <span class="text-xs text-slate-500 font-medium">Por: ${q.author || 'Anónimo'}</span>
-              </div>
-              <span class="text-[11px] font-mono text-slate-400">${q.date || 'Reciente'}</span>
-            </div>
-            
-            <p class="text-sm sm:text-base font-semibold text-slate-900 mb-2">
-              «${q.question}»
-            </p>
-
-            ${hasAnswer ? `
-              <div class="mt-3 pt-3 border-t border-slate-200/80 bg-emerald-50/60 p-3 rounded-lg border border-emerald-100">
-                <div class="flex items-center gap-1.5 text-xs font-bold text-emerald-800 mb-1">
-                  <span class="material-symbols-outlined text-[16px]">check_circle</span>
-                  <span>Respuesta (${q.answeredBy || 'Docente / Equipo'}):</span>
-                </div>
-                <p class="text-xs sm:text-sm text-slate-700 leading-relaxed">
-                  ${q.answer}
-                </p>
-              </div>
-            ` : `
-              <div class="mt-2 text-xs text-amber-700 bg-amber-50 px-2.5 py-1.5 rounded-md inline-flex items-center gap-1">
-                <span class="material-symbols-outlined text-[14px]">schedule</span>
-                <span>Pendiente de respuesta por el docente</span>
-              </div>
-            `}
-          </div>
-        `;
-      }).join('');
-    }
-
-    function submitQuestion(e) {
-      e.preventDefault();
-      const authorInput = document.getElementById('student-name');
-      const categoryInput = document.getElementById('question-category');
-      const textInput = document.getElementById('question-text');
-
-      const questionText = textInput.value.trim();
-      if (!questionText) return;
-
-      const newQ = {
-        id: 'q_' + Date.now(),
-        author: authorInput.value.trim() || 'Estudiante Anónimo',
-        category: categoryInput.value,
-        date: new Date().toISOString().split('T')[0],
-        question: questionText,
-        answer: '',
-        answeredBy: ''
-      };
-
-      let currentQuestions = [];
-      try {
-        const raw = localStorage.getItem(STORAGE_KEY);
-        currentQuestions = raw ? JSON.parse(raw) : [];
-      } catch (err) {
-        currentQuestions = [];
-      }
-
-      currentQuestions.unshift(newQ);
-      localStorage.setItem(STORAGE_KEY, JSON.stringify(currentQuestions));
-
-      // Limpiar formulario y re-renderizar
-      textInput.value = '';
-      authorInput.value = '';
-      renderCommunityQuestions(currentQuestions);
-
-      // Feedback visual rápido
-      alert('¡Pregunta guardada con éxito en la base de datos! Si alguien la responde, se actualizará automáticamente.');
-    }
-
-    // Inicializar al cargar la página
-    document.addEventListener('DOMContentLoaded', () => {
-      loadQuestions();
-    });
-  </script>
+  <!-- Scripts Modulares -->
+  <script src="firebase-config.js"></script>
+  <script src="app.js"></script>
 </body>
 </html>
