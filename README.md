@@ -1,57 +1,55 @@
-# Electiva de Inteligencia Artificial · Dosificador Penal Colombia
+# IurisDosis Colombia — Dosificador Penal & Sistema de Cuartos
 
-> Aplicación web 100% Client-Side (sin servidor y sin autenticación obligatoria) diseñada para funcionar fluidamente en navegadores móviles (iOS / Android) y computadores de escritorio.
+> Aplicación web 100% Client-Side (sin servidor y sin registro obligatorio) para el cálculo riguroso de la dosificación penal y el sistema de cuartos de punibilidad en el Derecho Penal Colombiano (Código Penal — Ley 599 de 2000 y Ley 906 de 2004).
 
-🚀 **Sitio Web Público:** [https://yvgarcia-gif.github.io/electiva-ia/](https://yvgarcia-gif.github.io/electiva-ia/)
-
----
-
-## 🏛️ Las 4 Funciones Principales
-
-### 1. Preguntas Frecuentes y Banco de Dudas Colaborativo
-* **Respuestas oficiales integradas:**
-  * ¿Qué se pone en «hechos del caso» en el ingreso del caso concreto?
-  * ¿El cálculo de los cuartos de punibilidad reemplaza la decisión final de un juez? (*Principio de Arbitrio Judicial*).
-  * ¿Cuándo se entrega la primera versión funcional del proyecto?
-* **Buscador en tiempo real:** Filtra preguntas al instante por palabras clave.
-* **Banco colaborativo:** Permite a los estudiantes registrar nuevas preguntas que se almacenan automáticamente y muestran las respuestas del equipo docente.
-
-### 2. Generador de Prompts Jurídicos con IA (Gemini)
-* Formulario estructurado para resolver consultas de Derecho Penal:
-  * *¿Cuál es el problema jurídico o duda del caso?*
-  * *¿Para qué módulo o delito aplica?*
-  * *¿Qué artículos o normas ya se han intentado aplicar?*
-* Generación de prompts profesionales con contexto de la Ley 599 de 2000 y Ley 906 de 2004.
-* Compatible con la **API de Google Gemini** y motor local offline.
-* Botón de un solo clic para **Copiar Prompt** e historial de los últimos 10 prompts generados.
-
-### 3. Calculadora de Cuartos y Dosificación Penal (Art. 61 C.P.)
-* Catálogo de delitos colombianos precargados (Homicidio agravado, Homicidio simple, Hurto calificado, Tráfico de estupefacientes, Concierto para delinquir y Delito personalizado).
-* Modificadores de grado automáticos: Tentativa (Art. 27), Complicidad (Art. 30) e Ira o Intenso Dolor (Art. 57).
-* Cálculo matemático instantáneo de los 4 cuartos punitivos (Mínimo, Medio Inferior, Medio Superior y Máximo) con conversión a Años, Meses y Días.
-* Matriz de circunstancias atenuantes (Art. 55) y agravantes (Art. 58) que resalta visualmente el cuarto legal aplicable.
-* Tasación individual motivada mediante slider interactivo y liquidación de rebajas por allanamiento o preacuerdos (Art. 351 Ley 906).
-* Generador y exportador del dictamen jurídico con memoria de cálculo.
-
-### 4. Escribir al Profesor (Canal Rápido)
-* Botón de acceso directo para abrir el cliente de correo (Gmail, Outlook) con asunto y plantilla de consulta prellenada.
-* Botón de un solo toque para copiar el correo oficial al portapapeles.
+🔗 **Repositorio Oficial:** [https://github.com/yvgarcia-gif/Dosificaci-n-de-penas](https://github.com/yvgarcia-gif/Dosificaci-n-de-penas)
 
 ---
 
-## 🗄️ Base de Datos y Persistencia
-* **Modo Local (Activo por defecto):** Guarda automáticamente preguntas, respuestas y prompts en el almacenamiento local del navegador (`LocalStorage`).
-* **Conector Google Firebase Firestore:** Archivo [`firebase-config.js`](firebase-config.js) listo para sincronización multi-dispositivo en la nube.
+## ⚖️ Las 4 Funciones Principales de la Aplicación
+
+### 1. Ingreso y Análisis de los Hechos del Caso Concreto *(Completada y Activa)*
+* **Metadatos judiciales:** Número de radicado SPOA (21 dígitos), etapa procesal (Arts. 286, 336, 355, 443, 447 C.P.P.), fiscalía y juzgado de conocimiento, imputado y defensa técnica.
+* **Núcleo fáctico imputable:** Transcripción de los hechos con fecha de ocurrencia (principio de legalidad y vigencia de la ley en el tiempo).
+* **Contador en vivo:** Control en tiempo real de palabras y caracteres.
+* **Escaneo inteligente de tipicidad:** Algoritmo que detecta patrones fácticos clave (*sevicia*, *indefensión*, *coparticipación*, *arma cortopunzante*).
+* **Calificación jurídica preliminar:** Tipo penal base, agravante específico, forma de intervención (Art. 29 y 30 C.P.), grado de consumación (Art. 27 C.P.) y modalidad de la conducta.
+* **Justicia negociada y allanamiento:** Tasación de rebajas por oportunidad procesal (hasta el 50%) con filtro imperativo de prohibiciones (*Art. 199 Ley 1098/2006* y *Art. 68A C.P.*).
+* **Predictor del sistema de cuartos (Art. 61 C.P.):** Selección interactiva de circunstancias de menor (Art. 55) y mayor punibilidad (Art. 58) con cálculo automático del cuarto resultante.
+
+### 2. Búsqueda de Delitos y Consulta de Penas Legales *(Fase Siguiente)*
+* Catálogo de delitos del Código Penal Colombiano.
+* Búsqueda ágil por nombre o número de artículo.
+* Visualización de penas mínimas y máximas en meses y años, y tipo de pena principal y accesoria.
+
+### 3. Calculadora de Dosificación y Sistema de Cuartos *(Fase Siguiente)*
+* Parámetros de determinación de mínimos y máximos aplicables (Art. 60 C.P.).
+* Cálculo matemático exacto del Ámbito Punitivo de Movilidad y su división en 4 partes iguales:
+  * Primer Cuarto (Mínimo).
+  * Cuartos Medios (Inferior y Superior).
+  * Cuarto Máximo.
+* Fijación de la pena en meses y días.
+
+### 4. Justificación Jurídica y Memoria de Cálculo *(Fase Siguiente)*
+* Dictamen jurídico formal motivado y exportable.
+* Detalle de las fórmulas matemáticas aplicadas y fundamentación normativa paso a paso.
 
 ---
 
-## 📂 Estructura del Proyecto
+## 💡 Espacio de Ayuda Inteligente (Gemini IA & Firebase)
+* Formulario estructurado para resolver dudas técnicas y jurídicas del usuario:
+  * *¿Cuál es su error o duda?*
+  * *¿Qué quieren lograr?*
+  * *¿Para qué módulo?*
+  * *¿Qué han intentado?*
+  * *¿Qué mensaje de error aparece?*
+* Generador de prompt especializado con la **API de Gemini** para copiar con 1 clic.
+* Base de datos comunitaria en **Firebase Firestore** para consultar preguntas frecuentes resueltas.
 
-```text
-ELECTIVA IA/
-├── index.html           # Interfaz principal completa y responsiva
-├── app.js               # Lógica de las 4 funciones, cálculos y persistencia
-├── firebase-config.js   # Conector preparado para Google Firebase Firestore
-├── README.md            # Documentación del proyecto
-└── .gitignore           # Exclusiones de archivos pesados y temporales
-```
+---
+
+## 🚀 Cómo Ejecutar en Local
+
+Al ser una aplicación 100% Client-Side, no requiere compilar ni instalar dependencias pesadas:
+1. Abre el archivo `index.html` en cualquier navegador web moderno (Google Chrome, Firefox, Edge, Safari).
+2. Es totalmente responsiva: se adapta automáticamente a teléfonos celulares, tablets y computadores de escritorio.
