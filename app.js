@@ -83,6 +83,17 @@ const AppNav = {
       }
     });
 
+    // Disparar sincronización o renderizado del módulo correspondiente
+    if (targetTab === 'delitos' && typeof CatalogoManager !== 'undefined') {
+      CatalogoManager.renderizar();
+    } else if (targetTab === 'calculadora' && typeof CalculadoraManager !== 'undefined') {
+      CalculadoraManager.sincronizarDesdeCaso();
+    } else if (targetTab === 'justificacion' && typeof JustificacionManager !== 'undefined') {
+      JustificacionManager.generarMemoria();
+    } else if (targetTab === 'ayuda' && typeof AyudaIA_Manager !== 'undefined') {
+      AyudaIA_Manager.init();
+    }
+
     window.scrollTo({ top: 0, behavior: 'smooth' });
   }
 };

@@ -1,0 +1,186 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <title>Test Suite - IurisDosis Colombia</title>
+</head>
+<body>
+  <div id="test-results"></div>
+
+  <!-- Include App DOM Elements needed for testing -->
+  <div style="display:none">
+    <div id="catalogo-lista-delitos"></div>
+    <div id="badge-total-delitos"></div>
+    <div id="catalogo-conteo-visibles"></div>
+    <div id="catalogo-detalle-articulo-badge"></div>
+    <div id="catalogo-detalle-bien"></div>
+    <div id="catalogo-detalle-nombre"></div>
+    <div id="catalogo-detalle-norma"></div>
+    <div id="catalogo-detalle-min"></div>
+    <div id="catalogo-detalle-min-anos"></div>
+    <div id="catalogo-detalle-max"></div>
+    <div id="catalogo-detalle-max-anos"></div>
+    <div id="catalogo-detalle-ambito"></div>
+    <div id="catalogo-detalle-cuarto-valor"></div>
+    <div id="catalogo-detalle-especificos"></div>
+
+    <div id="calc-badge-articulo"></div>
+    <div id="calc-delito-nombre"></div>
+    <div id="calc-delito-cita"></div>
+    <div id="calc-pena-min-meses"></div>
+    <div id="calc-pena-min-anos"></div>
+    <div id="calc-pena-max-meses"></div>
+    <div id="calc-pena-max-anos"></div>
+    <div id="calc-ambito-meses"></div>
+    <div id="calc-cuarto-amplitud"></div>
+    <div id="calc-subtitulo-cuartos"></div>
+    <div id="rango-cuarto-1-meses"></div>
+    <div id="rango-cuarto-1-human"></div>
+    <div id="rango-cuarto-2-meses"></div>
+    <div id="rango-cuarto-2-human"></div>
+    <div id="rango-cuarto-3-meses"></div>
+    <div id="rango-cuarto-3-human"></div>
+    <div id="rango-cuarto-4-meses"></div>
+    <div id="rango-cuarto-4-human"></div>
+    <div id="calc-regla-legal-texto"></div>
+    <div id="card-cuarto-1"></div>
+    <div id="card-cuarto-2"></div>
+    <div id="card-cuarto-3"></div>
+    <div id="card-cuarto-4"></div>
+    <div id="tag-seleccion-cuarto-1"></div>
+    <div id="tag-seleccion-cuarto-2"></div>
+    <div id="tag-seleccion-cuarto-3"></div>
+    <div id="tag-seleccion-cuarto-4"></div>
+    <div id="calc-badge-cuarto-activo"></div>
+    <input id="slider-cuarto-quantum" type="range" />
+    <div id="slider-cuarto-min-label"></div>
+    <div id="slider-cuarto-max-label"></div>
+    <div id="calc-quantum-meses"></div>
+    <div id="calc-quantum-human"></div>
+    <div id="resumen-pena-previa"></div>
+    <div id="resumen-descuento-meses"></div>
+    <div id="calc-pena-final-meses"></div>
+    <div id="calc-pena-final-human"></div>
+    <div id="alerta-calc-prohibicion"></div>
+    <div id="calc-rebaja-tag"></div>
+
+    <div id="memoria-radicado"></div>
+    <div id="memoria-fecha-emision"></div>
+    <div id="memoria-procesado"></div>
+    <div id="memoria-juzgado"></div>
+    <div id="memoria-fiscalia"></div>
+    <div id="memoria-delito"></div>
+    <table><tbody id="memoria-tabla-cuartos"></tbody></table>
+    <div id="memoria-motivacion-cuarto-texto"></div>
+    <div id="memoria-criterios-art59"></div>
+    <div id="box-subrogado-art63"></div>
+    <div id="subrogado-art63-status"></div>
+    <div id="box-subrogado-art38b"></div>
+    <div id="subrogado-art38b-status"></div>
+    <div id="memoria-sentencia-resumen"></div>
+    <div id="memoria-sentencia-human"></div>
+
+    <input id="ayuda-pregunta-duda" value="Duda de prueba" />
+    <input id="ayuda-pregunta-meta" value="Meta de prueba" />
+    <select id="ayuda-pregunta-modulo"><option value="calculadora">Calculadora</option></select>
+    <textarea id="ayuda-pregunta-intentos">Intentos</textarea>
+    <input id="ayuda-pregunta-error" value="Error" />
+    <pre id="ayuda-prompt-salida"></pre>
+    <div id="banco-dudas-lista"></div>
+    <div id="badge-conteo-dudas-tab"></div>
+    <div id="toast-notif"></div>
+    <div id="toast-text"></div>
+    <div id="toast-icon"></div>
+  </div>
+
+  <script src="firebase-config.js"></script>
+  <script src="app.js"></script>
+  <script src="catalogo-y-calculadora.js"></script>
+
+  <script>
+    const results = [];
+    function assert(name, condition) {
+      if (condition) {
+        results.push(`[PASS] ${name}`);
+      } else {
+        results.push(`[FAIL] ${name}`);
+      }
+    }
+
+    try {
+      // Test 1: Helper formatearMesesAHumano
+      assert("formatearMesesAHumano 208m = 17 años y 4 meses", formatearMesesAHumano(208) === '17 años y 4 meses');
+      assert("formatearMesesAHumano 450m = 37 años y 6 meses", formatearMesesAHumano(450) === '37 años y 6 meses');
+
+      // Test 2: Catálogo de Delitos
+      assert("Catálogo tiene 22 delitos registrados", DelitosCatalogo.length === 22);
+      const homicidio = DelitosCatalogo.find(d => d.id === '103');
+      assert("Art. 103 tiene min 208 y max 450", homicidio.minMeses === 208 && homicidio.maxMeses === 450);
+
+      // Test 3: CatalogoManager
+      CatalogoManager.init();
+      CatalogoManager.filtrarBienJuridico('vida');
+      assert("Filtro vida funciona", CatalogoManager.filtroActivo === 'vida');
+      CatalogoManager.filtrarBienJuridico('todos');
+
+      // Test 4: CalculadoraManager y Ámbito Punitivo (Art. 61)
+      AppState.caso.delitoBase = '103';
+      CalculadoraManager.sincronizarDesdeCaso();
+      assert("Ámbito punitivo Homicidio es 242", CalculadoraManager.ambitoPunitivo === 242);
+      assert("Valor del cuarto es 60.5", CalculadoraManager.cuartoAmplitud === 60.5);
+      assert("Cuarto 1 mínimo es 208 a 268.5", CalculadoraManager.cuartos.q1.min === 208 && CalculadoraManager.cuartos.q1.max === 268.5);
+      assert("Cuarto 4 máximo es 389.5 a 450", CalculadoraManager.cuartos.q4.min === 389.5 && CalculadoraManager.cuartos.q4.max === 450);
+
+      // Test 5: Subsunción de cuartos (Art. 61 inc. 2)
+      AppState.caso.atenuantesCount = 2;
+      AppState.caso.agravantesCount = 0;
+      CalculadoraManager.determinarCuartoActivo();
+      assert("Solo atenuantes selecciona Cuarto Mínimo", CalculadoraManager.cuartoActivo === 'minimo');
+
+      AppState.caso.atenuantesCount = 0;
+      AppState.caso.agravantesCount = 2;
+      CalculadoraManager.determinarCuartoActivo();
+      assert("Solo agravantes selecciona Cuarto Máximo", CalculadoraManager.cuartoActivo === 'maximo');
+
+      AppState.caso.atenuantesCount = 1;
+      AppState.caso.agravantesCount = 1;
+      CalculadoraManager.determinarCuartoActivo();
+      assert("Atenuantes y agravantes concurrentes selecciona Cuartos Medios", CalculadoraManager.cuartoActivo === 'medios');
+
+      // Test 6: Justicia Premial y Descuento
+      AppState.caso.rebajaPorcentaje = 40;
+      AppState.caso.prohibicionArt199 = false;
+      CalculadoraManager.actualizarQuantum(215);
+      assert("Pena 215 con 40% rebaja da 129 meses", CalculadoraManager.penaFinalMeses === 129);
+
+      // Prohibición Art. 199
+      AppState.caso.prohibicionArt199 = true;
+      CalculadoraManager.actualizarQuantum(215);
+      assert("Con prohibición Art. 199, pena final es 215 meses (0% rebaja)", CalculadoraManager.penaFinalMeses === 215);
+
+      // Test 7: JustificacionManager
+      JustificacionManager.generarMemoria();
+      const txtDictamen = JustificacionManager.generarTextoCompleto();
+      assert("Dictamen contiene radicado y normas C.P.", txtDictamen.includes('Artículos 59, 60 y 61') && txtDictamen.includes('REPÚBLICA DE COLOMBIA'));
+
+      // Test 8: Banco de Dudas
+      BancoDudasManager.init();
+      assert("Banco de dudas tiene preguntas iniciales", BancoDudasManager.dudas.length >= 4);
+
+      // Test 9: AyudaIA Prompt Generator
+      AyudaIA_Manager.generarPrompt();
+      const promptGen = document.getElementById('ayuda-prompt-salida').textContent;
+      assert("Prompt de Gemini contiene 5 preguntas estructuradas", promptGen.includes('MÓDULO AFECTADO') && promptGen.includes('Duda de prueba'));
+
+    } catch (e) {
+      results.push(`[ERROR EXCEPTION] ${e.message} at ${e.stack}`);
+    }
+
+    const out = document.getElementById('test-results');
+    out.innerHTML = results.map(r => `<div>${r}</div>`).join('');
+    console.log("TEST_RESULTS_START");
+    results.forEach(r => console.log(r));
+    console.log("TEST_RESULTS_END");
+  </script>
+</body>
+</html>

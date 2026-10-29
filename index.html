@@ -631,75 +631,834 @@ El agresor propinó más de doce heridas reiteradas y profundas en tórax y extr
     </section>
 
     <!-- ========================================================== -->
-    <!-- FUNCIÓN 2: CATÁLOGO Y BÚSQUEDA DE DELITOS (Placeholder)    -->
+    <!-- FUNCIÓN 2: CATÁLOGO Y BÚSQUEDA DE DELITOS (Ley 599/2000)   -->
     <!-- ========================================================== -->
     <section id="panel-delitos" class="hidden flex-col gap-6">
-      <div class="bg-white rounded-2xl p-8 border border-surface-dim shadow-sm text-center flex flex-col items-center justify-center gap-3">
-        <div class="w-14 h-14 rounded-2xl bg-amber-50 text-judicial-amber flex items-center justify-center font-bold text-2xl border border-amber-200">
-          <span class="material-symbols-outlined text-3xl">menu_book</span>
+      
+      <!-- Encabezado del Módulo -->
+      <div class="flex flex-col md:flex-row md:items-end justify-between gap-4 pb-2 border-b border-surface-dim">
+        <div>
+          <div class="flex items-center gap-2 mb-1">
+            <span class="px-2 py-0.5 rounded text-[11px] font-bold uppercase tracking-wider bg-amber-100 text-judicial-amber border border-amber-200">
+              Función 2 • Catálogo C.P.
+            </span>
+            <span class="text-xs font-mono text-judicial-muted">Ley 599 de 2000</span>
+          </div>
+          <h2 class="font-headline font-bold text-2xl text-judicial-navy tracking-tight">Catálogo de Delitos y Tipos Penales</h2>
+          <p class="text-xs sm:text-sm text-judicial-muted mt-1 max-w-2xl">
+            Consulte los tipos penales vigentes con sus penas legales mínimas y máximas. Seleccione cualquier delito para transferirlo automáticamente a la Calculadora de Cuartos.
+          </p>
         </div>
-        <h2 class="font-headline font-bold text-xl text-judicial-navy">Función 2: Búsqueda de Delitos y Consulta de Penas Legales</h2>
-        <p class="text-xs sm:text-sm text-judicial-muted max-w-lg">
-          Este módulo se implementará en la siguiente fase una vez hayamos validado y guardado en GitHub la <strong>Función 1: Ingreso de Hechos</strong>.
-        </p>
-        <button onclick="AppNav.switchTab('hechos')" class="mt-2 px-4 py-2 rounded-xl bg-surface-container text-judicial-navy text-xs font-semibold hover:bg-surface-high transition-colors">
-          ← Volver a Función 1
-        </button>
+        <div class="flex items-center gap-2">
+          <span id="badge-total-delitos" class="px-3 py-1 rounded-xl bg-white border border-surface-dim text-xs font-mono font-semibold text-judicial-navy shadow-sm">
+            22 delitos registrados
+          </span>
+        </div>
+      </div>
+
+      <!-- Barra de Búsqueda y Filtros por Bien Jurídico -->
+      <div class="bg-white rounded-2xl p-4 sm:p-5 border border-surface-dim shadow-sm flex flex-col gap-4">
+        <div class="relative w-full">
+          <span class="material-symbols-outlined absolute left-3.5 top-1/2 -translate-y-1/2 text-slate-400 text-xl">search</span>
+          <input id="catalogo-search-input" oninput="CatalogoManager.buscar(this.value)" type="search" placeholder="Buscar por número de artículo (ej. 103), nombre del delito o palabra clave..." class="w-full pl-11 pr-24 py-3 bg-surface text-sm font-medium text-judicial-navy rounded-xl border border-surface-dim focus:outline-none focus:border-judicial-amber focus:ring-1 focus:ring-judicial-amber transition-all">
+          <button onclick="document.getElementById('catalogo-search-input').value=''; CatalogoManager.buscar('');" class="absolute right-3 top-1/2 -translate-y-1/2 text-xs font-medium text-judicial-muted hover:text-judicial-navy px-2 py-1 rounded bg-white border border-surface-dim">
+            Limpiar
+          </button>
+        </div>
+
+        <!-- Chips de Filtro por Bien Jurídico -->
+        <div class="flex items-center gap-2 overflow-x-auto pb-1 scrollbar-none" id="catalogo-filtros-chips">
+          <button onclick="CatalogoManager.filtrarBienJuridico('todos')" class="btn-filtro-bien px-3.5 py-1.5 rounded-full text-xs font-semibold whitespace-nowrap bg-judicial-navy text-white shadow-sm transition-all" data-bien="todos">
+            Todos (22)
+          </button>
+          <button onclick="CatalogoManager.filtrarBienJuridico('vida')" class="btn-filtro-bien px-3.5 py-1.5 rounded-full text-xs font-semibold whitespace-nowrap bg-surface-container text-judicial-navy hover:bg-surface-high transition-all" data-bien="vida">
+            Vida e Integridad Personal
+          </button>
+          <button onclick="CatalogoManager.filtrarBienJuridico('patrimonio')" class="btn-filtro-bien px-3.5 py-1.5 rounded-full text-xs font-semibold whitespace-nowrap bg-surface-container text-judicial-navy hover:bg-surface-high transition-all" data-bien="patrimonio">
+            Patrimonio Económico
+          </button>
+          <button onclick="CatalogoManager.filtrarBienJuridico('sexual')" class="btn-filtro-bien px-3.5 py-1.5 rounded-full text-xs font-semibold whitespace-nowrap bg-surface-container text-judicial-navy hover:bg-surface-high transition-all" data-bien="sexual">
+            Libertad e Integridad Sexual
+          </button>
+          <button onclick="CatalogoManager.filtrarBienJuridico('salud')" class="btn-filtro-bien px-3.5 py-1.5 rounded-full text-xs font-semibold whitespace-nowrap bg-surface-container text-judicial-navy hover:bg-surface-high transition-all" data-bien="salud">
+            Salud Pública
+          </button>
+          <button onclick="CatalogoManager.filtrarBienJuridico('administracion')" class="btn-filtro-bien px-3.5 py-1.5 rounded-full text-xs font-semibold whitespace-nowrap bg-surface-container text-judicial-navy hover:bg-surface-high transition-all" data-bien="administracion">
+            Administración Pública
+          </button>
+          <button onclick="CatalogoManager.filtrarBienJuridico('seguridad')" class="btn-filtro-bien px-3.5 py-1.5 rounded-full text-xs font-semibold whitespace-nowrap bg-surface-container text-judicial-navy hover:bg-surface-high transition-all" data-bien="seguridad">
+            Seguridad Pública
+          </button>
+        </div>
+      </div>
+
+      <!-- Bento Grid: Ficha Destacada + Lista de Delitos -->
+      <div class="grid grid-cols-1 lg:grid-cols-12 gap-6">
+        
+        <!-- COLUMNA IZQUIERDA: FICHA TÉCNICA EXPANDIDA (lg:col-span-7) -->
+        <div class="lg:col-span-7 flex flex-col gap-4">
+          <div class="bg-white rounded-2xl p-6 border-2 border-judicial-amber/30 shadow-md relative overflow-hidden flex flex-col justify-between gap-5">
+            
+            <!-- Barra superior de estado -->
+            <div class="flex items-center justify-between pb-3 border-b border-surface-dim">
+              <div class="flex items-center gap-2">
+                <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-[11px] font-bold bg-amber-100 text-judicial-amber border border-amber-200">
+                  FICHA TÉCNICA VIGENTE
+                </span>
+                <span id="catalogo-detalle-bien" class="text-xs font-mono text-judicial-muted">Vida e Integridad Personal</span>
+              </div>
+              <span id="catalogo-detalle-articulo-badge" class="px-2.5 py-1 rounded-lg text-xs font-mono font-bold bg-judicial-navy text-white">
+                Art. 103 C.P.
+              </span>
+            </div>
+
+            <!-- Título y Texto del Código Penal -->
+            <div>
+              <h3 id="catalogo-detalle-nombre" class="font-headline font-bold text-2xl text-judicial-navy">Homicidio Simple</h3>
+              <p id="catalogo-detalle-norma" class="font-headline italic text-xs sm:text-sm text-judicial-muted mt-2 p-3 bg-surface-container-low rounded-xl border border-surface-dim leading-relaxed">
+                "El que matare a otro, incurrirá en prisión de doscientos ocho (208) a cuatrocientos cincuenta (450) meses."
+              </p>
+            </div>
+
+            <!-- Métricas Punitivas Clave (Mínima, Máxima, Ámbito) -->
+            <div class="grid grid-cols-3 gap-2 p-3.5 bg-surface rounded-xl border border-surface-dim text-center">
+              <div>
+                <span class="block text-[10px] font-mono uppercase text-judicial-muted">Pena Mínima</span>
+                <span id="catalogo-detalle-min" class="font-mono font-bold text-lg sm:text-xl text-judicial-navy">208 m</span>
+                <span id="catalogo-detalle-min-anos" class="block text-[10px] font-mono text-judicial-muted">17a 4m</span>
+              </div>
+              <div class="border-x border-surface-dim">
+                <span class="block text-[10px] font-mono uppercase text-judicial-muted">Pena Máxima</span>
+                <span id="catalogo-detalle-max" class="font-mono font-bold text-lg sm:text-xl text-judicial-navy">450 m</span>
+                <span id="catalogo-detalle-max-anos" class="block text-[10px] font-mono text-judicial-muted">37a 6m</span>
+              </div>
+              <div>
+                <span class="block text-[10px] font-mono uppercase text-judicial-amber font-bold">Ámbito Punitivo</span>
+                <span id="catalogo-detalle-ambito" class="font-mono font-bold text-lg sm:text-xl text-judicial-amber">242 m</span>
+                <span id="catalogo-detalle-cuarto-valor" class="block text-[10px] font-mono text-judicial-amber">Cuarto: 60.5m</span>
+              </div>
+            </div>
+
+            <!-- Penas Accesorias / Multa / Circunstancias Específicas -->
+            <div class="space-y-2">
+              <h4 class="text-xs font-bold uppercase tracking-wider text-judicial-navy flex items-center gap-1.5">
+                <span class="material-symbols-outlined text-sm text-judicial-amber">info</span>
+                Características y Modificadores Específicos
+              </h4>
+              <div id="catalogo-detalle-especificos" class="text-xs text-judicial-muted space-y-1.5 bg-surface-container-low p-3 rounded-xl border border-surface-dim">
+                <p>• <strong>Agravantes específicas (Art. 104):</strong> Pena de 400 a 600 meses si se ejecuta sobre ascendiente/descendiente, por precio, con sevicia, etc.</p>
+                <p>• <strong>Pena accesoria:</strong> Inhabilitación para el ejercicio de derechos y funciones públicas por tiempo igual a la pena privativa.</p>
+              </div>
+            </div>
+
+            <!-- Botón Principal de Acción -->
+            <button onclick="CatalogoManager.cargarEnCalculadora()" class="w-full py-3.5 px-4 rounded-xl bg-judicial-navy text-white font-semibold text-xs sm:text-sm flex items-center justify-center gap-2 hover:bg-slate-800 active:scale-[0.99] transition-all shadow-md">
+              <span class="material-symbols-outlined text-amber-400">calculate</span>
+              <span>Seleccionar este delito para Dosimetría Penal</span>
+              <span class="material-symbols-outlined text-sm">arrow_forward</span>
+            </button>
+          </div>
+        </div>
+
+        <!-- COLUMNA DERECHA: LISTA DE DELITOS EXPLORABLES (lg:col-span-5) -->
+        <div class="lg:col-span-5 flex flex-col gap-3">
+          <div class="flex items-center justify-between px-1">
+            <span class="text-xs font-bold text-judicial-navy uppercase tracking-wider">Tipos Penales Registrados</span>
+            <span id="catalogo-conteo-visibles" class="text-[11px] font-mono text-judicial-muted">Mostrando 22 de 22</span>
+          </div>
+
+          <!-- Contenedor scrollable con las tarjetas -->
+          <div id="catalogo-lista-delitos" class="flex flex-col gap-2.5 max-h-[580px] overflow-y-auto pr-1">
+            <!-- Renderizado dinámicamente por CatalogoManager -->
+          </div>
+        </div>
+
       </div>
     </section>
 
     <!-- ========================================================== -->
-    <!-- FUNCIÓN 3: CALCULADORA DE CUARTOS (Placeholder)            -->
+    <!-- FUNCIÓN 3: CALCULADORA DE CUARTOS (Art. 60 y 61 C.P.)      -->
     <!-- ========================================================== -->
     <section id="panel-calculadora" class="hidden flex-col gap-6">
-      <div class="bg-white rounded-2xl p-8 border border-surface-dim shadow-sm text-center flex flex-col items-center justify-center gap-3">
-        <div class="w-14 h-14 rounded-2xl bg-blue-50 text-judicial-navy flex items-center justify-center font-bold text-2xl border border-blue-200">
-          <span class="material-symbols-outlined text-3xl">calculate</span>
+
+      <!-- Encabezado del Módulo -->
+      <div class="flex flex-col md:flex-row md:items-end justify-between gap-4 pb-2 border-b border-surface-dim">
+        <div>
+          <div class="flex items-center gap-2 mb-1">
+            <span class="px-2 py-0.5 rounded text-[11px] font-bold uppercase tracking-wider bg-emerald-100 text-emerald-800 border border-emerald-200">
+              Función 3 • Dosimetría Aritmética
+            </span>
+            <span class="text-xs font-mono text-judicial-muted">Arts. 60 y 61 Ley 599/2000</span>
+          </div>
+          <h2 class="font-headline font-bold text-2xl text-judicial-navy tracking-tight">Calculadora de Cuartos de Punibilidad</h2>
+          <p class="text-xs sm:text-sm text-judicial-muted mt-1 max-w-2xl">
+            Cómputo exacto del ámbito punitivo, división en cuatro cuartos y subsunción obligatoria según la concurrencia de circunstancias de atenuación y agravación.
+          </p>
         </div>
-        <h2 class="font-headline font-bold text-xl text-judicial-navy">Función 3: Calculadora de Dosificación y Sistema de Cuartos</h2>
-        <p class="text-xs sm:text-sm text-judicial-muted max-w-lg">
-          Cálculo exacto del ámbito punitivo y división en 4 cuartos según los Arts. 60 y 61 del Código Penal.
-        </p>
-        <button onclick="AppNav.switchTab('hechos')" class="mt-2 px-4 py-2 rounded-xl bg-surface-container text-judicial-navy text-xs font-semibold hover:bg-surface-high transition-colors">
-          ← Volver a Función 1
-        </button>
+        <div class="flex items-center gap-2">
+          <button onclick="AppNav.switchTab('delitos')" class="px-3.5 py-1.5 rounded-xl bg-white border border-surface-dim text-xs font-semibold text-judicial-navy hover:bg-surface transition-colors flex items-center gap-1 shadow-sm">
+            <span class="material-symbols-outlined text-sm">menu_book</span>
+            <span>Cambiar Delito</span>
+          </button>
+        </div>
+      </div>
+
+      <!-- Bento Unit 1: Resumen del Delito y Extremos Legales -->
+      <div class="bg-white rounded-2xl p-5 border border-surface-dim shadow-sm flex flex-col lg:flex-row lg:items-center justify-between gap-4">
+        <div class="space-y-1 max-w-xl">
+          <div class="flex items-center gap-2">
+            <span id="calc-badge-articulo" class="bg-surface-container px-2 py-0.5 rounded text-xs font-mono font-bold text-judicial-navy">
+              Art. 103 C.P.
+            </span>
+            <span class="text-xs font-mono font-bold text-judicial-amber uppercase tracking-wide">
+              Delito Calificado
+            </span>
+          </div>
+          <h3 id="calc-delito-nombre" class="font-headline font-bold text-xl text-judicial-navy">Homicidio Simple</h3>
+          <p id="calc-delito-cita" class="font-headline italic text-xs text-judicial-muted leading-relaxed">
+            "El que matare a otro, incurrirá en prisión de 208 a 450 meses."
+          </p>
+        </div>
+
+        <!-- Métricas Punitivas: Mínima, Máxima, Ámbito -->
+        <div class="grid grid-cols-3 gap-3 p-3 bg-surface rounded-xl border border-surface-dim text-center min-w-[320px]">
+          <div class="border-r border-surface-dim pr-2">
+            <span class="block text-[10px] font-mono uppercase text-judicial-muted">Pena Mínima</span>
+            <span id="calc-pena-min-meses" class="font-mono font-bold text-lg text-judicial-navy">208 m</span>
+            <span id="calc-pena-min-anos" class="block text-[10px] font-mono text-judicial-muted">17a 4m</span>
+          </div>
+          <div class="border-r border-surface-dim px-2">
+            <span class="block text-[10px] font-mono uppercase text-judicial-muted">Pena Máxima</span>
+            <span id="calc-pena-max-meses" class="font-mono font-bold text-lg text-judicial-navy">450 m</span>
+            <span id="calc-pena-max-anos" class="block text-[10px] font-mono text-judicial-muted">37a 6m</span>
+          </div>
+          <div class="pl-2">
+            <span class="block text-[10px] font-mono uppercase text-judicial-amber font-bold">Ámbito Punitivo</span>
+            <span id="calc-ambito-meses" class="font-mono font-bold text-lg text-judicial-amber">242 m</span>
+            <span id="calc-cuarto-amplitud" class="block text-[10px] font-mono text-judicial-amber">Cuarto: 60.5m</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Bento Unit 2: Modificadores del Artículo 60 C.P. (Dispositivos Amplificadores) -->
+      <div class="bg-white rounded-2xl p-5 border border-surface-dim shadow-sm flex flex-col gap-4">
+        <div class="flex items-center justify-between pb-2 border-b border-surface-dim">
+          <div class="flex items-center gap-2">
+            <span class="material-symbols-outlined text-judicial-amber">tune</span>
+            <h3 class="font-headline font-bold text-base text-judicial-navy">Parámetros de Modificación de los Límites (Art. 60 C.P.)</h3>
+          </div>
+          <span class="text-xs font-mono text-judicial-muted">Fase 1: Fijación de Extremos</span>
+        </div>
+
+        <div class="grid grid-cols-1 sm:grid-cols-3 gap-3">
+          <div>
+            <label class="block text-xs font-bold text-judicial-navy mb-1">Forma de Intervención (Art. 29/30)</label>
+            <select id="calc-select-intervencion" onchange="CalculadoraManager.actualizarModificadores()" class="w-full bg-surface text-xs font-medium text-judicial-navy p-2.5 rounded-xl border border-surface-dim focus:outline-none focus:border-judicial-amber">
+              <option value="autor_directo">Autor directo o coautor (100% de la pena)</option>
+              <option value="complice">Cómplice (Disminuye de 1/6 a 1/2)</option>
+              <option value="interviniente">Interviniente no calificado (Disminuye 1/4)</option>
+            </select>
+          </div>
+          <div>
+            <label class="block text-xs font-bold text-judicial-navy mb-1">Grado de Ejecución (Art. 27)</label>
+            <select id="calc-select-ejecucion" onchange="CalculadoraManager.actualizarModificadores()" class="w-full bg-surface text-xs font-medium text-judicial-navy p-2.5 rounded-xl border border-surface-dim focus:outline-none focus:border-judicial-amber">
+              <option value="consumado">Delito consumado (Límites plenos)</option>
+              <option value="tentativa_acabada">Tentativa acabada (Disminuye de 1/3 a 1/2)</option>
+              <option value="tentativa_inacabada">Tentativa inacabada (Disminuye de 1/2 a 2/3)</option>
+            </select>
+          </div>
+          <div>
+            <label class="block text-xs font-bold text-judicial-navy mb-1">Circunstancias Específicas Post-delictuales</label>
+            <select id="calc-select-especiales" onchange="CalculadoraManager.actualizarModificadores()" class="w-full bg-surface text-xs font-medium text-judicial-navy p-2.5 rounded-xl border border-surface-dim focus:outline-none focus:border-judicial-amber">
+              <option value="ninguno">Ninguna causal especial</option>
+              <option value="ira_intenso_dolor">Ira e intenso dolor (Art. 57: 1/6 a 1/2)</option>
+              <option value="marginalidad">Marginalidad o ignorancia (Art. 56: 1/6 a 1/2)</option>
+            </select>
+          </div>
+        </div>
+
+        <!-- Indicador de Límites Modificados -->
+        <div id="calc-alerta-modificadores" class="p-3 bg-amber-50 rounded-xl border border-amber-200 flex items-center justify-between text-xs font-mono text-judicial-amber">
+          <span>Límites aplicables tras modificadores del Art. 60:</span>
+          <span id="calc-limites-modificados-display" class="font-bold text-judicial-navy">208 a 450 meses (Sin modificaciones)</span>
+        </div>
+      </div>
+
+      <!-- Bento Unit 3: Visualización de los 4 Cuartos Punitivos (Art. 61 C.P.) -->
+      <div class="bg-white rounded-2xl p-5 border border-surface-dim shadow-sm flex flex-col gap-4">
+        <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-2">
+          <div>
+            <h3 class="font-headline font-bold text-lg text-judicial-navy flex items-center gap-2">
+              <span class="material-symbols-outlined text-judicial-amber">view_timeline</span>
+              Determinación Pedagógica de los Cuatro Cuartos
+            </h3>
+            <p id="calc-subtitulo-cuartos" class="text-xs text-judicial-muted mt-0.5">
+              Ámbito de 242 meses dividido entre 4 = <strong>60.5 meses por cuarto</strong>.
+            </p>
+          </div>
+          <span id="calc-badge-cuarto-activo" class="self-start sm:self-auto inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-mono font-bold bg-emerald-100 text-emerald-800 border border-emerald-200">
+            <span class="w-2 h-2 rounded-full bg-emerald-600 animate-pulse"></span>
+            Primer Cuarto (Mínimo) Operativo
+          </span>
+        </div>
+
+        <!-- Cuadrícula de 4 Cuartos -->
+        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3 pt-1">
+          
+          <!-- Cuarto 1: MÍNIMO -->
+          <div id="card-cuarto-1" class="cuarto-card relative rounded-xl p-4 border-2 border-emerald-600 bg-emerald-50 text-emerald-950 shadow-sm flex flex-col justify-between transition-all">
+            <div class="flex items-center justify-between mb-2">
+              <span class="text-[11px] font-bold uppercase tracking-wider text-emerald-800">1. Cuarto Mínimo</span>
+              <span class="material-symbols-outlined text-emerald-700 text-base" id="icon-cuarto-1">check_circle</span>
+            </div>
+            <div>
+              <span id="rango-cuarto-1-meses" class="font-mono font-bold text-lg text-emerald-900 block">208 a 268.5 m</span>
+              <span id="rango-cuarto-1-human" class="text-[11px] font-mono text-emerald-700 block mt-0.5">17a 4m a 22a 4.5m</span>
+            </div>
+            <div class="mt-3 pt-2 border-t border-emerald-200 flex items-center justify-between text-[10px] font-mono text-emerald-800 font-semibold">
+              <span>Amplitud: 60.5m</span>
+              <span id="tag-seleccion-cuarto-1">ACTIVO</span>
+            </div>
+          </div>
+
+          <!-- Cuarto 2: MEDIO INFERIOR -->
+          <div id="card-cuarto-2" class="cuarto-card relative rounded-xl p-4 border border-surface-dim bg-white text-judicial-navy opacity-75 hover:opacity-100 transition-all flex flex-col justify-between">
+            <div class="flex items-center justify-between mb-2">
+              <span class="text-[11px] font-bold uppercase tracking-wider text-amber-800">2. Cuarto Medio Inf.</span>
+              <span class="text-xs font-mono text-amber-700 font-bold">Q2</span>
+            </div>
+            <div>
+              <span id="rango-cuarto-2-meses" class="font-mono font-bold text-lg text-judicial-navy block">268.5 a 329 m</span>
+              <span id="rango-cuarto-2-human" class="text-[11px] font-mono text-judicial-muted block mt-0.5">22a 4.5m a 27a 5m</span>
+            </div>
+            <div class="mt-3 pt-2 border-t border-surface-dim flex items-center justify-between text-[10px] font-mono text-judicial-muted">
+              <span>Amplitud: 60.5m</span>
+              <span id="tag-seleccion-cuarto-2">Inactivo</span>
+            </div>
+          </div>
+
+          <!-- Cuarto 3: MEDIO SUPERIOR -->
+          <div id="card-cuarto-3" class="cuarto-card relative rounded-xl p-4 border border-surface-dim bg-white text-judicial-navy opacity-75 hover:opacity-100 transition-all flex flex-col justify-between">
+            <div class="flex items-center justify-between mb-2">
+              <span class="text-[11px] font-bold uppercase tracking-wider text-amber-800">3. Cuarto Medio Sup.</span>
+              <span class="text-xs font-mono text-amber-700 font-bold">Q3</span>
+            </div>
+            <div>
+              <span id="rango-cuarto-3-meses" class="font-mono font-bold text-lg text-judicial-navy block">329 a 389.5 m</span>
+              <span id="rango-cuarto-3-human" class="text-[11px] font-mono text-judicial-muted block mt-0.5">27a 5m a 32a 5.5m</span>
+            </div>
+            <div class="mt-3 pt-2 border-t border-surface-dim flex items-center justify-between text-[10px] font-mono text-judicial-muted">
+              <span>Amplitud: 60.5m</span>
+              <span id="tag-seleccion-cuarto-3">Inactivo</span>
+            </div>
+          </div>
+
+          <!-- Cuarto 4: MÁXIMO -->
+          <div id="card-cuarto-4" class="cuarto-card relative rounded-xl p-4 border border-surface-dim bg-white text-judicial-navy opacity-75 hover:opacity-100 transition-all flex flex-col justify-between">
+            <div class="flex items-center justify-between mb-2">
+              <span class="text-[11px] font-bold uppercase tracking-wider text-red-800">4. Cuarto Máximo</span>
+              <span class="text-xs font-mono text-red-700 font-bold">Q4</span>
+            </div>
+            <div>
+              <span id="rango-cuarto-4-meses" class="font-mono font-bold text-lg text-judicial-navy block">389.5 a 450 m</span>
+              <span id="rango-cuarto-4-human" class="text-[11px] font-mono text-judicial-muted block mt-0.5">32a 5.5m a 37a 6m</span>
+            </div>
+            <div class="mt-3 pt-2 border-t border-surface-dim flex items-center justify-between text-[10px] font-mono text-judicial-muted">
+              <span>Amplitud: 60.5m</span>
+              <span id="tag-seleccion-cuarto-4">Inactivo</span>
+            </div>
+          </div>
+
+        </div>
+
+        <!-- Banner de Regla Legal Automática (Art. 61 inc. 2) -->
+        <div id="calc-regla-legal-banner" class="p-3.5 bg-emerald-50 rounded-xl border border-emerald-200 flex items-start gap-3">
+          <span class="material-symbols-outlined text-emerald-800 text-xl mt-0.5">gavel</span>
+          <div class="space-y-0.5 text-xs">
+            <h4 class="font-bold text-emerald-950">Subsunción Legal: Regla del Artículo 61, Inciso 2 C.P.</h4>
+            <p id="calc-regla-legal-texto" class="text-emerald-800 leading-relaxed">
+              "El sentenciador sólo podrá moverse dentro del <strong>cuarto mínimo</strong> cuando únicamente concurran circunstancias de menor punibilidad." Al acreditarse atenuantes y no registrarse agravantes imputadas, la discrecionalidad judicial queda legalmente restringida al intervalo de <strong>208 a 268.5 meses</strong>.
+            </p>
+          </div>
+        </div>
+      </div>
+
+      <!-- Bento Unit 4: Modulación Judicial del Quantum y Allanamiento -->
+      <div class="grid grid-cols-1 lg:grid-cols-12 gap-6">
+        
+        <!-- Ponderación dentro del Cuarto (lg:col-span-7) -->
+        <div class="lg:col-span-7 bg-white rounded-2xl p-5 border border-surface-dim shadow-sm flex flex-col justify-between gap-4">
+          <div>
+            <div class="flex items-center justify-between pb-2 border-b border-surface-dim">
+              <h3 class="font-headline font-bold text-base text-judicial-navy flex items-center gap-2">
+                <span class="material-symbols-outlined text-judicial-amber">tune</span>
+                Ponderación Judicial dentro del Cuarto (Art. 61 inc. 3)
+              </h3>
+              <span class="text-xs font-mono text-judicial-muted">Art. 59 C.P.</span>
+            </div>
+            <p class="text-xs text-judicial-muted mt-2">
+              Mueva el control deslizante para tasar la pena exacta dentro de los límites del cuarto legalmente aplicable:
+            </p>
+
+            <!-- Slider Control -->
+            <div class="mt-4 p-4 bg-surface rounded-xl border border-surface-dim space-y-3">
+              <div class="flex items-center justify-between">
+                <span id="slider-cuarto-min-label" class="text-xs font-mono font-semibold text-judicial-muted">Mín: 208 m</span>
+                <div class="text-center">
+                  <span id="calc-quantum-meses" class="font-mono font-bold text-2xl text-judicial-navy">215.0</span>
+                  <span class="text-xs font-mono text-judicial-muted">meses</span>
+                  <span id="calc-quantum-human" class="block text-xs font-mono font-bold text-judicial-amber">(17 años y 11 meses)</span>
+                </div>
+                <span id="slider-cuarto-max-label" class="text-xs font-mono font-semibold text-judicial-muted">Máx: 268.5 m</span>
+              </div>
+
+              <input id="slider-cuarto-quantum" oninput="CalculadoraManager.actualizarQuantum(this.value)" type="range" min="208" max="268.5" step="0.5" value="215" class="w-full h-2.5 bg-slate-200 rounded-lg appearance-none cursor-pointer">
+
+              <div class="flex justify-between text-[11px] font-mono text-judicial-muted">
+                <span>Extremo Inferior</span>
+                <span>Punto Medio</span>
+                <span>Extremo Superior</span>
+              </div>
+            </div>
+          </div>
+
+          <!-- Criterios de Ponderación (Art. 59) -->
+          <div class="space-y-2">
+            <span class="text-xs font-bold text-judicial-navy uppercase tracking-wider">Criterios de Ponderación Judicial Aplicados:</span>
+            <div class="grid grid-cols-2 gap-2 text-xs">
+              <label class="flex items-center gap-2 p-2 rounded-lg bg-surface border border-surface-dim">
+                <input type="checkbox" checked class="rounded text-judicial-amber">
+                <span>Gravedad de la conducta</span>
+              </label>
+              <label class="flex items-center gap-2 p-2 rounded-lg bg-surface border border-surface-dim">
+                <input type="checkbox" checked class="rounded text-judicial-amber">
+                <span>Daño real o potencial</span>
+              </label>
+              <label class="flex items-center gap-2 p-2 rounded-lg bg-surface border border-surface-dim">
+                <input type="checkbox" checked class="rounded text-judicial-amber">
+                <span>Intensidad del dolo</span>
+              </label>
+              <label class="flex items-center gap-2 p-2 rounded-lg bg-surface border border-surface-dim">
+                <input type="checkbox" checked class="rounded text-judicial-amber">
+                <span>Necesidad de prevención</span>
+              </label>
+            </div>
+          </div>
+        </div>
+
+        <!-- Justicia Premial y Resultado Final (lg:col-span-5) -->
+        <div class="lg:col-span-5 bg-white rounded-2xl p-5 border border-surface-dim shadow-sm flex flex-col justify-between gap-4">
+          <div>
+            <div class="flex items-center justify-between pb-2 border-b border-surface-dim">
+              <h3 class="font-headline font-bold text-base text-judicial-navy flex items-center gap-2">
+                <span class="material-symbols-outlined text-judicial-amber">handshake</span>
+                Justicia Premial (Art. 351 CPP)
+              </h3>
+              <span id="calc-rebaja-tag" class="px-2 py-0.5 rounded text-[10px] font-mono font-bold bg-amber-100 text-judicial-amber">
+                -40% Pactado
+              </span>
+            </div>
+
+            <div class="mt-3 space-y-2.5 text-xs">
+              <div class="flex justify-between p-2 rounded-lg bg-surface border border-surface-dim">
+                <span class="text-judicial-muted">Pena individualizada previa:</span>
+                <span id="resumen-pena-previa" class="font-mono font-bold text-judicial-navy">215.0 meses</span>
+              </div>
+              <div class="flex justify-between p-2 rounded-lg bg-surface border border-surface-dim">
+                <span class="text-judicial-muted">Descuento por allanamiento:</span>
+                <span id="resumen-descuento-meses" class="font-mono font-bold text-emerald-700">-86.0 meses (-40%)</span>
+              </div>
+              <div id="alerta-calc-prohibicion" class="hidden p-2 rounded-lg bg-red-50 border border-red-200 text-judicial-crimson text-[11px] font-semibold">
+                ⚠️ Prohibición Art. 199 / 68A activa: Rebaja restringida al 0%.
+              </div>
+            </div>
+          </div>
+
+          <!-- Caja de Resultado Definitivo -->
+          <div class="p-4 bg-judicial-navy text-white rounded-xl shadow-md space-y-3">
+            <span class="text-[10px] uppercase font-bold tracking-wider text-amber-400 block">Pena Privativa de la Libertad Definitiva</span>
+            <div>
+              <span id="calc-pena-final-meses" class="font-mono font-bold text-3xl text-white">129.0</span>
+              <span class="text-sm font-mono text-slate-300">meses</span>
+            </div>
+            <div id="calc-pena-final-human" class="font-headline font-bold text-base text-amber-300">
+              10 años y 9 meses de prisión
+            </div>
+            <button onclick="AppNav.switchTab('justificacion')" class="w-full mt-2 py-2.5 px-3 rounded-lg bg-judicial-amber hover:bg-amber-600 font-semibold text-xs text-white flex items-center justify-center gap-1.5 transition-all">
+              <span class="material-symbols-outlined text-base">gavel</span>
+              <span>Generar Justificación Jurídica Formal</span>
+            </button>
+          </div>
+        </div>
+
       </div>
     </section>
 
     <!-- ========================================================== -->
-    <!-- FUNCIÓN 4: JUSTIFICACIÓN JURÍDICA (Placeholder)            -->
+    <!-- FUNCIÓN 4: JUSTIFICACIÓN JURÍDICA Y MEMORIA DE CÁLCULO     -->
     <!-- ========================================================== -->
     <section id="panel-justificacion" class="hidden flex-col gap-6">
-      <div class="bg-white rounded-2xl p-8 border border-surface-dim shadow-sm text-center flex flex-col items-center justify-center gap-3">
-        <div class="w-14 h-14 rounded-2xl bg-emerald-50 text-judicial-emeraldLight flex items-center justify-center font-bold text-2xl border border-emerald-200">
-          <span class="material-symbols-outlined text-3xl">gavel</span>
+
+      <!-- Encabezado con Botones de Acción -->
+      <div class="flex flex-col md:flex-row md:items-end justify-between gap-4 pb-2 border-b border-surface-dim">
+        <div>
+          <div class="flex items-center gap-2 mb-1">
+            <span class="px-2 py-0.5 rounded text-[11px] font-bold uppercase tracking-wider bg-purple-100 text-purple-900 border border-purple-200">
+              Función 4 • Auto de Dosificación
+            </span>
+            <span class="text-xs font-mono text-judicial-muted">Art. 59 y 447 C.P.P.</span>
+          </div>
+          <h2 class="font-headline font-bold text-2xl text-judicial-navy tracking-tight">Justificación Jurídica y Memoria de Cálculo</h2>
+          <p class="text-xs sm:text-sm text-judicial-muted mt-1 max-w-2xl">
+            Estructura de fundamentación dosimétrica con cómputo estricto del sistema de cuartos, motivación judicial y control de subrogados penales.
+          </p>
         </div>
-        <h2 class="font-headline font-bold text-xl text-judicial-navy">Función 4: Justificación Jurídica y Memoria de Cálculo</h2>
-        <p class="text-xs sm:text-sm text-judicial-muted max-w-lg">
-          Generador de dictamen formal y memoria técnico-jurídica para sustentar ante jueces y docentes.
+        <div class="flex items-center gap-2">
+          <button onclick="JustificacionManager.copiarDictamen()" class="px-3.5 py-2 rounded-xl bg-white border border-surface-dim text-xs font-semibold text-judicial-navy hover:bg-surface transition-colors flex items-center gap-1.5 shadow-sm">
+            <span class="material-symbols-outlined text-sm">content_copy</span>
+            <span>Copiar Dictamen</span>
+          </button>
+          <button onclick="JustificacionManager.descargarTxt()" class="px-3.5 py-2 rounded-xl bg-white border border-surface-dim text-xs font-semibold text-judicial-navy hover:bg-surface transition-colors flex items-center gap-1.5 shadow-sm">
+            <span class="material-symbols-outlined text-sm">download</span>
+            <span>Descargar .txt</span>
+          </button>
+          <button onclick="window.print()" class="px-3.5 py-2 rounded-xl bg-judicial-navy text-white text-xs font-semibold hover:bg-slate-800 transition-colors flex items-center gap-1.5 shadow-sm">
+            <span class="material-symbols-outlined text-sm">print</span>
+            <span>Imprimir</span>
+          </button>
+        </div>
+      </div>
+
+      <!-- Banner de Validez Formal -->
+      <div class="bg-white border-l-4 border-judicial-amber rounded-2xl p-4 shadow-sm flex items-start gap-3">
+        <div class="w-9 h-9 rounded-full bg-amber-100 text-judicial-amber flex items-center justify-center shrink-0">
+          <span class="material-symbols-outlined text-xl">verified</span>
+        </div>
+        <div>
+          <span class="text-[10px] font-bold uppercase tracking-wider text-judicial-amber bg-amber-50 px-2 py-0.5 rounded border border-amber-200">
+            Validez Procesal Formal
+          </span>
+          <h4 class="font-headline font-bold text-sm text-judicial-navy mt-1">
+            Documento Técnico para Audiencia de Individualización de Pena y Sentencia (Art. 447 C.P.P.)
+          </h4>
+          <p class="text-xs text-judicial-muted mt-0.5">
+            Sustento objetivo y motivado que cumple integralmente las exigencias de motivación probatoria y cuantitativa del Artículo 59 de la Ley 599 de 2000.
+          </p>
+        </div>
+      </div>
+
+      <!-- Carátula Procesal Formal -->
+      <div class="bg-white rounded-2xl p-6 border border-surface-dim shadow-sm space-y-4">
+        <div class="flex flex-col sm:flex-row sm:items-center justify-between pb-3 border-b border-surface-dim gap-2">
+          <div class="flex items-center gap-2">
+            <span class="material-symbols-outlined text-judicial-navy">folder_shared</span>
+            <span class="font-mono font-bold text-sm text-judicial-navy" id="memoria-radicado">RADICADO SPOA: 110016000000202300452</span>
+          </div>
+          <span class="text-xs font-mono text-judicial-muted" id="memoria-fecha-emision">Emisión: Bogotá D.C.</span>
+        </div>
+
+        <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-4 text-xs">
+          <div class="p-3 bg-surface rounded-xl border border-surface-dim">
+            <span class="block text-[10px] font-mono uppercase text-judicial-muted">Procesado</span>
+            <span id="memoria-procesado" class="font-bold text-judicial-navy text-sm">Julián David Morales Reyes</span>
+          </div>
+          <div class="p-3 bg-surface rounded-xl border border-surface-dim">
+            <span class="block text-[10px] font-mono uppercase text-judicial-muted">Juzgado de Conocimiento</span>
+            <span id="memoria-juzgado" class="font-bold text-judicial-navy text-sm">Juzgado 12 Penal del Circuito</span>
+          </div>
+          <div class="p-3 bg-surface rounded-xl border border-surface-dim">
+            <span class="block text-[10px] font-mono uppercase text-judicial-muted">Despacho Fiscal</span>
+            <span id="memoria-fiscalia" class="font-bold text-judicial-navy text-sm">Fiscalía 45 Seccional de Vida</span>
+          </div>
+          <div class="p-3 bg-surface rounded-xl border border-surface-dim">
+            <span class="block text-[10px] font-mono uppercase text-judicial-muted">Delito Calificado</span>
+            <span id="memoria-delito" class="font-bold text-judicial-navy text-sm">Art. 103 C.P. (Homicidio)</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Desglose Matemático y Aritmético Certificado -->
+      <div class="bg-white rounded-2xl p-6 border border-surface-dim shadow-sm space-y-4">
+        <h3 class="font-headline font-bold text-lg text-judicial-navy flex items-center gap-2 pb-2 border-b border-surface-dim">
+          <span class="material-symbols-outlined text-judicial-amber">calculate</span>
+          1. Determinación de Límites Punitivos y Segmentación en Cuartos (Art. 60 y 61 C.P.)
+        </h3>
+
+        <div class="overflow-x-auto">
+          <table class="w-full text-xs text-left border-collapse">
+            <thead>
+              <tr class="bg-surface text-judicial-navy border-b border-surface-dim font-bold">
+                <th class="p-3">Parámetro Dosimétrico</th>
+                <th class="p-3 text-center">Meses</th>
+                <th class="p-3 text-center">Expresión en Años / Meses</th>
+                <th class="p-3">Fundamento Normativo</th>
+              </tr>
+            </thead>
+            <tbody id="memoria-tabla-cuartos" class="divide-y divide-surface-dim">
+              <!-- Rellenado dinámicamente por JustificacionManager -->
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+      <!-- Motivación de la Subsunción en el Cuarto (Art. 61 inc. 2) -->
+      <div class="bg-white rounded-2xl p-6 border border-surface-dim shadow-sm space-y-3">
+        <h3 class="font-headline font-bold text-lg text-judicial-navy flex items-center gap-2 pb-2 border-b border-surface-dim">
+          <span class="material-symbols-outlined text-judicial-amber">balance</span>
+          2. Justificación de la Elección del Cuarto de Punibilidad
+        </h3>
+        <p id="memoria-motivacion-cuarto-texto" class="text-xs sm:text-sm text-judicial-navy leading-relaxed bg-surface p-4 rounded-xl border border-surface-dim">
+          <!-- Generado dinámicamente -->
         </p>
-        <button onclick="AppNav.switchTab('hechos')" class="mt-2 px-4 py-2 rounded-xl bg-surface-container text-judicial-navy text-xs font-semibold hover:bg-surface-high transition-colors">
-          ← Volver a Función 1
+      </div>
+
+      <!-- Motivación del Quantum y Fines de la Pena (Art. 59 C.P.) -->
+      <div class="bg-white rounded-2xl p-6 border border-surface-dim shadow-sm space-y-3">
+        <h3 class="font-headline font-bold text-lg text-judicial-navy flex items-center gap-2 pb-2 border-b border-surface-dim">
+          <span class="material-symbols-outlined text-judicial-amber">psychology</span>
+          3. Ponderación de los Criterios del Artículo 59 y Fines de la Pena (Art. 4 C.P.)
+        </h3>
+        <div id="memoria-criterios-art59" class="grid grid-cols-1 md:grid-cols-2 gap-3 text-xs">
+          <!-- Generado dinámicamente -->
+        </div>
+      </div>
+
+      <!-- Análisis de Mecanismos Sustitutivos (Art. 38B y 63 C.P.) -->
+      <div class="bg-white rounded-2xl p-6 border border-surface-dim shadow-sm space-y-3">
+        <h3 class="font-headline font-bold text-lg text-judicial-navy flex items-center gap-2 pb-2 border-b border-surface-dim">
+          <span class="material-symbols-outlined text-judicial-amber">shield</span>
+          4. Pronunciamiento sobre Mecanismos Sustitutivos de la Pena de Prisión
+        </h3>
+        <div class="grid grid-cols-1 sm:grid-cols-2 gap-4 text-xs">
+          <div id="box-subrogado-art63" class="p-4 rounded-xl border bg-surface flex flex-col justify-between gap-2">
+            <div>
+              <span class="font-bold text-judicial-navy block">Suspensión Condicional de la Pena (Art. 63 C.P.)</span>
+              <p class="text-judicial-muted mt-1" id="subrogado-art63-desc">Exige que la pena impuesta no sea superior a 4 años (48 meses).</p>
+            </div>
+            <span id="subrogado-art63-status" class="px-2.5 py-1 rounded text-[10px] font-mono font-bold bg-red-100 text-judicial-crimson self-start">
+              IMPROCEDENTE (Pena superior a 48 meses)
+            </span>
+          </div>
+
+          <div id="box-subrogado-art38b" class="p-4 rounded-xl border bg-surface flex flex-col justify-between gap-2">
+            <div>
+              <span class="font-bold text-judicial-navy block">Prisión Domiciliaria como Sustitutiva (Art. 38B C.P.)</span>
+              <p class="text-judicial-muted mt-1" id="subrogado-art38b-desc">Exige pena mínima legal igual o inferior a 8 años (96 meses) y no estar en exclusiones.</p>
+            </div>
+            <span id="subrogado-art38b-status" class="px-2.5 py-1 rounded text-[10px] font-mono font-bold bg-red-100 text-judicial-crimson self-start">
+              IMPROCEDENTE (Pena mínima superior a 96 meses)
+            </span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Resumen Resolutivo Final -->
+      <div class="bg-judicial-navy text-white rounded-2xl p-6 shadow-md flex flex-col sm:flex-row items-center justify-between gap-4">
+        <div>
+          <span class="text-[11px] font-mono uppercase tracking-wider text-amber-400 font-bold">PARTE RESOLUTIVA DOSIMÉTRICA</span>
+          <h4 class="font-headline font-bold text-2xl text-white mt-1" id="memoria-sentencia-resumen">CONDENA DEFINITIVA: 129 MESES</h4>
+          <p class="text-xs text-slate-300 mt-0.5" id="memoria-sentencia-human">Equivalente a 10 años y 9 meses de prisión efectiva.</p>
+        </div>
+        <button onclick="JustificacionManager.copiarDictamen()" class="px-5 py-3 rounded-xl bg-judicial-amber hover:bg-amber-600 text-white font-semibold text-xs flex items-center gap-2 transition-all shadow shrink-0">
+          <span class="material-symbols-outlined text-sm">content_copy</span>
+          <span>Copiar Auto Completo</span>
         </button>
       </div>
+
     </section>
 
     <!-- ========================================================== -->
-    <!-- ESPACIO DE AYUDA, GEMINI IA & BANCO DE DUDAS (Placeholder)  -->
+    <!-- ESPACIO DE AYUDA, GEMINI IA & BANCO DE DUDAS (Firebase)    -->
     <!-- ========================================================== -->
     <section id="panel-ayuda" class="hidden flex-col gap-6">
-      <div class="bg-white rounded-2xl p-8 border border-surface-dim shadow-sm text-center flex flex-col items-center justify-center gap-3">
-        <div class="w-14 h-14 rounded-2xl bg-amber-50 text-judicial-amber flex items-center justify-center font-bold text-2xl border border-amber-200">
-          <span class="material-symbols-outlined text-3xl">psychology</span>
+
+      <!-- Encabezado del Módulo -->
+      <div class="flex flex-col md:flex-row md:items-end justify-between gap-4 pb-2 border-b border-surface-dim">
+        <div>
+          <div class="flex items-center gap-2 mb-1">
+            <span class="px-2 py-0.5 rounded text-[11px] font-bold uppercase tracking-wider bg-amber-100 text-judicial-amber border border-amber-200">
+              Espacio de Ayuda Inteligente
+            </span>
+            <span class="text-xs font-mono text-judicial-muted">Gemini IA + Firebase Firestore</span>
+          </div>
+          <h2 class="font-headline font-bold text-2xl text-judicial-navy tracking-tight">Asistente IA y Banco Comunitario de Dudas</h2>
+          <p class="text-xs sm:text-sm text-judicial-muted mt-1 max-w-2xl">
+            Describe tu consulta respondiendo las 5 preguntas. Un agente con la API de Gemini redactará el prompt perfecto para copiar con 1 clic, y las consultas quedarán guardadas para consulta comunitaria.
+          </p>
         </div>
-        <h2 class="font-headline font-bold text-xl text-judicial-navy">Espacio de Ayuda Inteligente (Gemini IA & Firebase)</h2>
-        <p class="text-xs sm:text-sm text-judicial-muted max-w-lg">
-          Aquí los usuarios describirán su duda (error, meta, módulo, intentos, mensaje) para que un agente de Gemini les genere el prompt para copiar, y las preguntas se almacenarán en Firebase.
-        </p>
-        <button onclick="AppNav.switchTab('hechos')" class="mt-2 px-4 py-2 rounded-xl bg-surface-container text-judicial-navy text-xs font-semibold hover:bg-surface-high transition-colors">
-          ← Volver a Función 1
+        
+        <!-- Píldora de Estado de Base de Datos -->
+        <div id="ayuda-db-status" class="flex items-center gap-2 px-3 py-1.5 rounded-xl bg-white border border-surface-dim shadow-sm text-xs font-mono">
+          <span class="w-2 h-2 rounded-full bg-emerald-500"></span>
+          <span id="ayuda-db-text" class="text-judicial-navy font-semibold">Base de datos local activa</span>
+        </div>
+      </div>
+
+      <!-- Navegación interna de Ayuda: Tabs Formulario vs Banco -->
+      <div class="flex items-center gap-2 border-b border-surface-dim pb-2">
+        <button id="tab-btn-nueva-consulta" onclick="AyudaIA_Manager.switchSubTab('consulta')" class="px-4 py-2 rounded-xl bg-judicial-navy text-white text-xs font-semibold flex items-center gap-1.5 shadow-sm transition-all">
+          <span class="material-symbols-outlined text-sm text-amber-400">psychology</span>
+          <span>1. Nueva Consulta y Generador de Prompt</span>
+        </button>
+        <button id="tab-btn-banco-dudas" onclick="AyudaIA_Manager.switchSubTab('banco')" class="px-4 py-2 rounded-xl bg-surface-container text-judicial-navy text-xs font-semibold flex items-center gap-1.5 hover:bg-surface-high transition-all">
+          <span class="material-symbols-outlined text-sm">forum</span>
+          <span id="badge-conteo-dudas-tab">2. Banco Comunitario de Dudas (4)</span>
         </button>
       </div>
+
+      <!-- SUB-PANEL 1: FORMULARIO DE LAS 5 PREGUNTAS Y GENERADOR DE PROMPT -->
+      <div id="subpanel-nueva-consulta" class="flex flex-col gap-6">
+        <div class="grid grid-cols-1 lg:grid-cols-12 gap-6">
+          
+          <!-- FORMULARIO 5 PREGUNTAS (lg:col-span-7) -->
+          <div class="lg:col-span-7 bg-white rounded-2xl p-6 border border-surface-dim shadow-sm flex flex-col gap-4">
+            <h3 class="font-headline font-bold text-base text-judicial-navy flex items-center gap-2 pb-2 border-b border-surface-dim">
+              <span class="material-symbols-outlined text-judicial-amber">help_outline</span>
+              Diagnóstico Estructurado de la Consulta (5 Preguntas)
+            </h3>
+
+            <!-- 1. ¿Cuál es su error o duda? -->
+            <div>
+              <label class="block text-xs font-bold text-judicial-navy mb-1 flex items-center gap-1">
+                <span>1. ¿Cuál es su error o duda?</span>
+                <span class="text-judicial-crimson">*</span>
+              </label>
+              <input id="ayuda-pregunta-duda" type="text" placeholder="Ej. El cálculo del ámbito punitivo no me resta adecuadamente la tentativa..." class="w-full bg-surface text-xs font-medium text-judicial-navy p-2.5 rounded-xl border border-surface-dim focus:outline-none focus:border-judicial-amber">
+            </div>
+
+            <!-- 2. ¿Qué quieren lograr? -->
+            <div>
+              <label class="block text-xs font-bold text-judicial-navy mb-1 flex items-center gap-1">
+                <span>2. ¿Qué quieren lograr?</span>
+                <span class="text-judicial-crimson">*</span>
+              </label>
+              <input id="ayuda-pregunta-meta" type="text" placeholder="Ej. Determinar los extremos punitivos exactos para homicidio en grado de tentativa con allanamiento..." class="w-full bg-surface text-xs font-medium text-judicial-navy p-2.5 rounded-xl border border-surface-dim focus:outline-none focus:border-judicial-amber">
+            </div>
+
+            <!-- 3. ¿Para qué módulo? -->
+            <div>
+              <label class="block text-xs font-bold text-judicial-navy mb-1 flex items-center gap-1">
+                <span>3. ¿Para qué módulo?</span>
+                <span class="text-judicial-crimson">*</span>
+              </label>
+              <select id="ayuda-pregunta-modulo" class="w-full bg-surface text-xs font-medium text-judicial-navy p-2.5 rounded-xl border border-surface-dim focus:outline-none focus:border-judicial-amber">
+                <option value="calculadora">Función 3: Calculadora de dosificación y sistema de cuartos</option>
+                <option value="hechos">Función 1: Ingreso de hechos del caso</option>
+                <option value="delitos">Función 2: Búsqueda de delitos y consulta de penas</option>
+                <option value="justificacion">Función 4: Justificación jurídica de los resultados</option>
+                <option value="general">General / Criterios normativos de la Ley 599 de 2000</option>
+              </select>
+            </div>
+
+            <!-- 4. ¿Qué han intentado? -->
+            <div>
+              <label class="block text-xs font-bold text-judicial-navy mb-1 flex items-center gap-1">
+                <span>4. ¿Qué han intentado?</span>
+                <span class="text-judicial-crimson">*</span>
+              </label>
+              <textarea id="ayuda-pregunta-intentos" rows="3" placeholder="Ej. Seleccioné el artículo 103, cambié la ejecución a tentativa acabada y traté de aplicar la rebaja del 50% en el slider..." class="w-full bg-surface text-xs font-medium text-judicial-navy p-2.5 rounded-xl border border-surface-dim focus:outline-none focus:border-judicial-amber"></textarea>
+            </div>
+
+            <!-- 5. ¿Qué mensaje de error aparece? -->
+            <div>
+              <label class="block text-xs font-bold text-judicial-navy mb-1">5. ¿Qué mensaje de error o inconsistencia aparece? (Opcional)</label>
+              <input id="ayuda-pregunta-error" type="text" placeholder="Ej. 'La pena resultante no puede ser inferior al mínimo legal de 104 meses' o ninguna..." class="w-full bg-surface text-xs font-medium text-judicial-navy p-2.5 rounded-xl border border-surface-dim focus:outline-none focus:border-judicial-amber">
+            </div>
+
+            <!-- Botones de Acción del Formulario -->
+            <div class="flex items-center gap-2 pt-2">
+              <button onclick="AyudaIA_Manager.generarPrompt()" class="flex-1 py-3 px-4 rounded-xl bg-judicial-navy text-white text-xs sm:text-sm font-semibold flex items-center justify-center gap-2 hover:bg-slate-800 transition-all shadow-md">
+                <span class="material-symbols-outlined text-amber-400">psychology</span>
+                <span>Generar Prompt con Gemini IA</span>
+              </button>
+              <button onclick="AyudaIA_Manager.limpiarFormulario()" class="px-4 py-3 rounded-xl bg-surface border border-surface-dim text-xs font-semibold text-judicial-navy hover:bg-slate-100 transition-colors">
+                Limpiar
+              </button>
+            </div>
+          </div>
+
+          <!-- SALIDA DEL PROMPT IA Y CONSULTA (lg:col-span-5) -->
+          <div class="lg:col-span-5 flex flex-col gap-4">
+            
+            <!-- Tarjeta de Prompt Generado -->
+            <div class="bg-white rounded-2xl p-6 border-2 border-judicial-amber/30 shadow-sm flex flex-col justify-between gap-4">
+              <div class="flex items-center justify-between pb-2 border-b border-surface-dim">
+                <div class="flex items-center gap-1.5">
+                  <span class="material-symbols-outlined text-judicial-amber">auto_awesome</span>
+                  <span class="text-xs font-bold text-judicial-navy uppercase tracking-wider">Prompt Estructurado</span>
+                </div>
+                <button onclick="AyudaIA_Manager.copiarPrompt()" class="px-2.5 py-1 rounded-lg bg-amber-50 text-judicial-amber hover:bg-amber-100 border border-amber-200 text-xs font-semibold flex items-center gap-1 transition-colors">
+                  <span class="material-symbols-outlined text-sm">content_copy</span>
+                  <span>Copiar Prompt</span>
+                </button>
+              </div>
+
+              <p class="text-xs text-judicial-muted">
+                Este prompt ha sido optimizado por el agente para que puedas pegarlo en <strong>Gemini</strong> o <strong>ChatGPT</strong> y obtener la respuesta exacta y justificada:
+              </p>
+
+              <!-- Área de visualización del Prompt -->
+              <div class="relative">
+                <pre id="ayuda-prompt-salida" class="bg-surface-container-low text-judicial-navy text-xs font-mono p-4 rounded-xl border border-surface-dim overflow-x-auto whitespace-pre-wrap max-h-[220px] select-all leading-relaxed">Completa el formulario de la izquierda y haz clic en "Generar Prompt con Gemini IA" para redactar tu solicitud especializada.</pre>
+              </div>
+
+              <!-- Resolver directamente con Gemini API -->
+              <div class="pt-2 border-t border-surface-dim space-y-2">
+                <button onclick="AyudaIA_Manager.consultarGemini()" class="w-full py-2.5 px-3 rounded-xl bg-judicial-amber text-white text-xs font-semibold flex items-center justify-center gap-2 hover:bg-amber-600 transition-colors shadow">
+                  <span class="material-symbols-outlined text-sm">bolt</span>
+                  <span>Resolver Directamente con la IA</span>
+                </button>
+                <span class="text-[10px] text-judicial-muted block text-center">
+                  Guarda automáticamente la consulta en el Banco Comunitario (Firebase).
+                </span>
+              </div>
+            </div>
+
+            <!-- Caja de Respuesta Directa de la IA -->
+            <div id="ayuda-caja-respuesta-ia" class="hidden bg-white rounded-2xl p-5 border border-surface-dim shadow-sm space-y-3">
+              <div class="flex items-center justify-between pb-2 border-b border-surface-dim">
+                <span class="text-xs font-bold text-emerald-800 flex items-center gap-1">
+                  <span class="material-symbols-outlined text-base">smart_toy</span>
+                  Respuesta del Asistente Gemini:
+                </span>
+                <span class="text-[10px] font-mono text-judicial-muted">Gemini 1.5 Pro</span>
+              </div>
+              <div id="ayuda-texto-respuesta-ia" class="text-xs text-judicial-navy leading-relaxed space-y-2 max-h-[250px] overflow-y-auto">
+                <!-- Rellenado por Gemini API -->
+              </div>
+            </div>
+
+          </div>
+
+        </div>
+      </div>
+
+      <!-- SUB-PANEL 2: BANCO COMUNITARIO DE DUDAS (FIREBASE FIRESTORE) -->
+      <div id="subpanel-banco-dudas" class="hidden flex-col gap-4">
+        
+        <!-- Barra de Búsqueda y Filtros del Banco -->
+        <div class="bg-white rounded-2xl p-4 border border-surface-dim shadow-sm flex flex-col sm:flex-row sm:items-center justify-between gap-3">
+          <div class="relative flex-1">
+            <span class="material-symbols-outlined absolute left-3 top-1/2 -translate-y-1/2 text-slate-400 text-lg">search</span>
+            <input id="banco-search-input" oninput="BancoDudasManager.buscar(this.value)" type="search" placeholder="Buscar en las preguntas y respuestas guardadas..." class="w-full pl-9 pr-4 py-2 bg-surface text-xs font-medium text-judicial-navy rounded-xl border border-surface-dim focus:outline-none focus:border-judicial-amber">
+          </div>
+          <div class="flex items-center gap-2">
+            <select id="banco-filtro-modulo" onchange="BancoDudasManager.filtrar(this.value)" class="bg-surface text-xs font-medium text-judicial-navy p-2 rounded-xl border border-surface-dim focus:outline-none">
+              <option value="todos">Todos los módulos</option>
+              <option value="calculadora">Calculadora de Cuartos</option>
+              <option value="hechos">Hechos del Caso</option>
+              <option value="delitos">Catálogo de Delitos</option>
+              <option value="justificacion">Justificación Jurídica</option>
+            </select>
+          </div>
+        </div>
+
+        <!-- Lista de Tarjetas de Dudas Comunitarias -->
+        <div id="banco-dudas-lista" class="grid grid-cols-1 md:grid-cols-2 gap-4">
+          <!-- Renderizado dinámicamente por BancoDudasManager -->
+        </div>
+      </div>
+
     </section>
 
   </main>
@@ -741,5 +1500,6 @@ El agresor propinó más de doce heridas reiteradas y profundas en tórax y extr
   <!-- Scripts de la Aplicación -->
   <script src="firebase-config.js"></script>
   <script src="app.js"></script>
+  <script src="catalogo-y-calculadora.js"></script>
 </body>
 </html>
