@@ -1017,12 +1017,15 @@ const AyudaIA_Manager = {
 
   actualizarEstadoDB() {
     const statusText = document.getElementById('ayuda-db-text');
-    const isFirebase = window.ElectivaFirebase && window.ElectivaFirebase.isConfigured;
+    const statusDot = document.querySelector('#ayuda-db-status span.rounded-full');
+    const isFirebase = window.ElectivaFirebase && window.ElectivaFirebase.isConfigured && window.ElectivaFirebase.getDb();
     if (statusText) {
       if (isFirebase) {
         statusText.textContent = "Google Firebase Firestore Conectado (Nube)";
+        if (statusDot) statusDot.className = "w-2 h-2 rounded-full bg-emerald-500 animate-pulse";
       } else {
-        statusText.textContent = "Base de datos local activa (Listo para Firebase)";
+        statusText.textContent = "Almacenamiento Local (Listo para Firebase)";
+        if (statusDot) statusDot.className = "w-2 h-2 rounded-full bg-amber-500";
       }
     }
   },
@@ -1224,6 +1227,52 @@ const BancoDudasManager = {
   init() {
     this.cargar();
     this.renderizar();
+    this.conectarFirebaseSiDisponible();
+  },
+
+  conectarFirebaseSiDisponible() {
+    if (window.ElectivaFirebase && window.ElectivaFirebase.isConfigured && window.ElectivaFirebase.getDb()) {
+      try {
+        const db = window.ElectivaFirebase.getDb();
+        const coleccion = window.ElectivaFirebase.coleccionDudas || "dudas_comunitarias";
+        
+        db.collection(coleccion)
+          .orderBy("timestamp", "desc")
+          .limit(30)
+          .onSnapshot((snapshot) => {
+            if (!snapshot.empty) {
+              const dudasRemotas = [];
+              snapshot.forEach((doc) => {
+                const data = doc.data();
+                dudasRemotas.push({
+                  id: doc.id,
+                  duda: data.duda || 'Consulta sin título',
+                  meta: data.meta || 'Objetivo general',
+                  modulo: data.modulo || 'General',
+                  intentos: data.intentos || '',
+                  errorMsg: data.errorMsg || '',
+                  respuesta: data.respuesta || 'En revisión por la comunidad jurídica',
+                  fecha: data.fecha || new Date().toLocaleDateString('es-CO')
+                });
+              });
+
+              // Integrar sin duplicar con las semillas locales
+              const idsRemotos = new Set(dudasRemotas.map(d => d.duda));
+              const localesRestantes = this.dudasIniciales.filter(d => !idsRemotos.has(d.duda));
+              this.dudas = [...dudasRemotas, ...localesRestantes];
+              this.guardar();
+              this.renderizar();
+              if (typeof AyudaIA_Manager !== 'undefined') {
+                AyudaIA_Manager.actualizarEstadoDB();
+              }
+            }
+          }, (err) => {
+            console.warn("Aviso de sincronización Firestore:", err);
+          });
+      } catch (e) {
+        console.warn("No se pudo iniciar listener en tiempo real de Firestore:", e);
+      }
+    }
   },
 
   cargar() {
@@ -1246,10 +1295,36 @@ const BancoDudasManager = {
 
   agregar(nuevaDuda) {
     nuevaDuda.id = 'duda_' + Date.now();
-    nuevaDuda.respuesta = 'Pendiente de respuesta por la comunidad o resuelta mediante el prompt de Gemini.';
+    nuevaDuda.respuesta = 'Consulta radicada en el Banco Comunitario. Respuesta sugerida generada mediante el Asistente Gemini.';
     this.dudas.unshift(nuevaDuda);
     this.guardar();
     this.renderizar();
+
+    // Sincronizar en la nube con Firestore si está configurado
+    if (window.ElectivaFirebase && window.ElectivaFirebase.isConfigured && window.ElectivaFirebase.getDb()) {
+      try {
+        const db = window.ElectivaFirebase.getDb();
+        const coleccion = window.ElectivaFirebase.coleccionDudas || "dudas_comunitarias";
+        db.collection(coleccion).add({
+          duda: nuevaDuda.duda,
+          meta: nuevaDuda.meta,
+          modulo: nuevaDuda.modulo,
+          intentos: nuevaDuda.intentos || '',
+          errorMsg: nuevaDuda.errorMsg || '',
+          respuesta: nuevaDuda.respuesta,
+          fecha: nuevaDuda.fecha || new Date().toLocaleDateString('es-CO'),
+          timestamp: (typeof firebase !== 'undefined' && firebase.firestore) 
+            ? firebase.firestore.FieldValue.serverTimestamp() 
+            : new Date()
+        }).then(() => {
+          CasoManager.mostrarToast("Duda guardada y sincronizada en Firebase Firestore", "cloud_done");
+        }).catch((err) => {
+          console.warn("Aviso al guardar en Firestore:", err);
+        });
+      } catch (err) {
+        console.warn("Error enviando documento a Firestore:", err);
+      }
+    }
   },
 
   buscar(query) {

@@ -1,18 +1,51 @@
-# Servidor web local ultraligero para IurisDosis Colombia
-$port = 8080
+# ==============================================================================
+# SERVIDOR WEB LOCAL ULTRALIGERO PARA IURISDOSIS COLOMBIA
+# Sin Node.js, sin Python, 100% nativo de Windows PowerShell (.NET HttpListener)
+# ==============================================================================
+
+$portsToTry = @(8080, 8081, 8082, 3000, 5000)
 $rootDir = $PSScriptRoot
 if (-not $rootDir) { $rootDir = (Get-Location).Path }
 
-$listener = New-Object System.Net.HttpListener
-$listener.Prefixes.Add("http://localhost:$port/")
+$listener = $null
+$activePort = $null
+
+foreach ($p in $portsToTry) {
+    try {
+        $tempListener = New-Object System.Net.HttpListener
+        $tempListener.Prefixes.Add("http://localhost:$p/")
+        $tempListener.Start()
+        $listener = $tempListener
+        $activePort = $p
+        break
+    } catch {
+        if ($tempListener) { $tempListener.Close() }
+    }
+}
+
+if (-not $listener) {
+    Write-Host "[ERROR] No se pudo vincular ningun puerto local (8080-8082, 3000, 5000)." -ForegroundColor Red
+    exit 1
+}
 
 try {
-    $listener.Start()
-    Write-Host "=========================================================="
-    Write-Host " Servidor local activo en: http://localhost:$port/"
-    Write-Host " Carpeta servida: $rootDir"
-    Write-Host " Presiona Ctrl+C para detener."
-    Write-Host "=========================================================="
+    Write-Host ""
+    Write-Host "======================================================================" -ForegroundColor Cyan
+    Write-Host "   ⚖️ IURISDOSIS COLOMBIA — SERVIDOR LOCAL ACTIVO" -ForegroundColor Yellow
+    Write-Host "======================================================================" -ForegroundColor Cyan
+    Write-Host "  • Aplicacion Principal : http://localhost:$activePort/" -ForegroundColor Green
+    Write-Host "  • Suite de Pruebas     : http://localhost:$activePort/test-suite.html" -ForegroundColor Cyan
+    Write-Host "  • Directorio Servido   : $rootDir" -ForegroundColor Gray
+    Write-Host "  • Presiona Ctrl + C para detener el servidor" -ForegroundColor Yellow
+    Write-Host "======================================================================" -ForegroundColor Cyan
+    Write-Host ""
+
+    # Abrir navegador predeterminado automáticamente
+    try {
+        Start-Process "http://localhost:$activePort/"
+    } catch {
+        # Si falla el lanzamiento automático del navegador, continuar sirviendo
+    }
 
     while ($listener.IsListening) {
         $context = $listener.GetContext()
@@ -59,14 +92,17 @@ try {
             $response.ContentType = "text/plain; charset=utf-8"
             $response.ContentLength64 = $msg.Length
             $response.OutputStream.Write($msg, 0, $msg.Length)
+            $response.OutputStream.Flush()
             $response.Close()
         }
     }
 } catch {
-    Write-Host "Servidor detenido: $_"
+    Write-Host "Servidor detenido: $_" -ForegroundColor Yellow
 } finally {
-    if ($listener.IsListening) {
+    if ($listener -and $listener.IsListening) {
         $listener.Stop()
     }
-    $listener.Close()
+    if ($listener) {
+        $listener.Close()
+    }
 }
